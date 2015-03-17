@@ -1,6 +1,6 @@
-package com.github.elizabetht.service;
+package com.github.ofs.service;
 
-import com.github.elizabetht.model.Student;
+import com.github.ofs.model.Student;
 
 public interface StudentService {
 	Student save(Student student);
