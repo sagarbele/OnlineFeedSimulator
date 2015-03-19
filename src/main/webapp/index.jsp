@@ -6,7 +6,6 @@
 body {
 	height: 100%;
 	margin: 0;
-	background: url(assets/img/books.jpg);
 	background-size: 1440px 800px;
 	background-repeat: no-repeat;
 	display: compact;
@@ -25,20 +24,20 @@ body {
 		</div>
 
 		<div class="navbar-collapse collapse navbar-responsive-collapse">
-			<form class="navbar-form navbar-right">
+			<!--<form class="navbar-form navbar-right">
 				<input type="text" class="form-control" placeholder="Search">
-			</form>
+			</form> -->
 			<ul class="nav navbar-nav navbar-right">
-				<li class="active"><a href="#">Home</a></li>
-				<li><a href="signup.html">Signup</a></li>
-				<li><a href="login.html">Login</a></li>
-				<li class="dropdown"><a href="#" class="dropdown-toggle"
+			<!-- <li class="active"><a href="#">Home</a></li>
+				<li><a href="signup.html">Signup</a></li> -->
+				<li><a href="showSimulator.html">Show Simulator</a></li>
+<!-- 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Explore<b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="#">Contact us</a></li>
 						<li class="divider"></li>
 						<li><a href="#">Further Actions</a></li>
-					</ul></li>
+					</ul></li> -->
 			</ul>
 		</div>
 		<!-- /.nav-collapse -->
@@ -46,13 +45,10 @@ body {
 	<div class="container">
 		<div class="jumbotron">
 			<div>
-				<h1>Welcome to Online Student Enrollment!</h1>
-				<p>To get started, you need to enter your details to enroll with
-					us. Or login to access your details, if you are already enrolled.</p>
+				<h1>Welcome to Online Feed Simulator!</h1>
 			</div>
-
-			<a class="btn btn-primary" href="signup.html">Signup » </a> <a
-				class="btn btn-primary" href="login.html">Login » </a>
+	<!-- 	<a class="btn btn-primary" href="signup.html">Signup » </a>  --> 
+			<a class="btn btn-primary" href="showSimulator.html">Show Simulator » </a>
 		</div>
 
 		<div></div>
