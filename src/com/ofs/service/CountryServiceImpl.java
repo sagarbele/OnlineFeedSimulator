@@ -7,31 +7,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ofs.dao.AnimalDao;
-import com.ofs.model.AnimalData;
-
+import com.ofs.dao.CountryDao;
+import com.ofs.model.CountryDetail;
 
 /**
  * @author  Sagar, Amit
  *
  */
-@Service("animalService")
+@Service("countryService")
 @Transactional(propagation = Propagation.SUPPORTS, readOnly = true)
-public class AnimalServiceImpl implements AnimalService {
+public class CountryServiceImpl implements CountryService {
 
 	@Autowired
-	private AnimalDao animalDao;
+	private CountryDao countryDao;
 	
 	@Transactional(propagation = Propagation.REQUIRED, readOnly = false)
 
-	public List<AnimalData> getAnimalData() {
-		return animalDao.getAnimalData();
+	public List<CountryDetail> getCountryData() {
+		return countryDao.getCountryData();
 	}
 	
-	
-	public List<AnimalData> getAnimalData(int countryId) {
-		return animalDao.getAnimalData(countryId);
+	public List<CountryDetail> getCountryData(int countryId) {
+		return countryDao.getCountryData(countryId);
 	}
-
-
 }

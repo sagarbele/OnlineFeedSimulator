@@ -12,4 +12,5 @@ public interface AnimalService {
 	
 	public List<AnimalData> getAnimalData();
 
+	public List<AnimalData> getAnimalData(int countryId);
 }

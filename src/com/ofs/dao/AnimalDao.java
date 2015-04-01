@@ -12,5 +12,6 @@ import com.ofs.model.AnimalData;
 public interface AnimalDao {
 	
 	public List<AnimalData> getAnimalData();
-	
+
+	public List<AnimalData> getAnimalData(int countryId);
 }

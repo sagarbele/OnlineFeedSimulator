@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,6 +24,12 @@ public class AnimalDaoImpl implements AnimalDao {
 	@SuppressWarnings("unchecked")
 	public List<AnimalData> getAnimalData() {
 		return (List<AnimalData>) sessionFactory.getCurrentSession().createCriteria(AnimalData.class).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<AnimalData> getAnimalData(int countryId) {
+		return (List<AnimalData>) sessionFactory.getCurrentSession().createCriteria(AnimalData.class).
+				add(Restrictions.eq("countryId", 1)).list();
 	}
 	
 }
