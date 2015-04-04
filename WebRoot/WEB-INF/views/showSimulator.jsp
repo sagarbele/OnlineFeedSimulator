@@ -12,33 +12,32 @@
 		<tr>
 			<th>Hi</th>
 		</tr>
+		<tr>
+			<td>${propertyValue }</td>
+		</tr>
+		<tr>
+
 			<c:choose>
 				<c:when test="${not empty countryList}">
 					<c:forEach items="${countryList}" var="country"
 						varStatus="varStatus">
-						<tr>
-							<td>${country.countryName}</td>
-						</tr>
+
+						<td>${country.countryName}</td>
+
 					</c:forEach>
 				</c:when>
 			</c:choose>
+
+		</tr>
 	</table>
 
 	<table align="left" border="1">
 		<tr>
 			<th>Hi</th>
 		</tr>
-			<c:choose>
-				<c:when test="${not empty animalData}">
-					<c:forEach items="${animalData}" var="animal"
-						varStatus="varStatus">
-						<tr>
-							<td>${animal.animalCount}</td>
-						</tr>
-					</c:forEach>
-				</c:when>
-			</c:choose>
+		<tr>
+			<td>${countryData}</td>
+		</tr>
 	</table>
-  <h5><a href="getData.html">Get Data</a></h5>
 </body>
 </html>

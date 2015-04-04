@@ -51,8 +51,8 @@ public class AnimalDataController {
 				+ unitIndex + "--propertyName-" + propertyName);
 
 		String propertyType = "";
-		if (unitIndex == "Energy") {
-			propertyType.equals("ENERGY (MJ/kg)");
+		if (unitIndex.equals("Energy")) {
+			propertyType="ENERGY (MJ/kg)";
 		}
 		if (unitIndex.equals("Protein")) {
 			propertyType = "PROTEIN (%)";
@@ -63,9 +63,9 @@ public class AnimalDataController {
 		String propertyValue = "";
 		for (Property pdata : propertyList) {
 			propertyValue = pdata.getPropertyValue();
-			 model.addAttribute("propertyValue",propertyValue);
 		}
-
+		 model.addAttribute("propertyValue",propertyValue);
+		
 		List<String> countryList = Arrays.asList(countryIdList.split(","));
 		List<Integer> newIntCountryList = new ArrayList<Integer>(
 				countryList.size());

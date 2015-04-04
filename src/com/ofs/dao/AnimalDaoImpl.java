@@ -30,7 +30,7 @@ public class AnimalDaoImpl implements AnimalDao {
 	@SuppressWarnings("unchecked")
 	public List<AnimalData> getAnimalData(int countryId) {
 		return (List<AnimalData>) sessionFactory.getCurrentSession().createCriteria(AnimalData.class).
-				add(Restrictions.eq("countryId", 1)).list();
+				add(Restrictions.eq("countryId", countryId)).list();
 	}
 	@SuppressWarnings("unchecked")
 	public List<AnimalData> getMultipleCountryAnimalData(List<Integer> countryList){

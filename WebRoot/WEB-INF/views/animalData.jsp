@@ -1,7 +1,15 @@
 
-	<div>
+<div>
+
+	<tr>
+		<th>Hi</th>
+	</tr>
+	<tr>
+		<td>${propertyValue }</td>
+	</tr>
+
 		<tr>
-			<th>Hi</th>
+			<td>${forms}</td>
 		</tr>
-		<table><tr><td>${forms}</td></tr></table>
-	</div>
+
+</div>

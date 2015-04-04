@@ -83,10 +83,10 @@
     
   </head>
   <body>
-    <form class="box" method="post" action="showSimulator.html?countryId=1" id="countryForm">
+    <form class="box" method="post" action="showSimulator.html?country=1" id="countryForm">
         <table align="left" border="1">
 		<tr>
-				<th>Hi</th>
+				<th>Hi ${propertyValue}</th>
 		</tr>
 		<tr>	<td>		
 			<c:choose>
