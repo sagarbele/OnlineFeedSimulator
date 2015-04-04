@@ -41,18 +41,15 @@ public class AnimalAllData {
 	 * ModelAndView welcome() { return new ModelAndView("index"); }
 	 */
 
-	@RequestMapping(value = "/showSimulator", method = RequestMethod.POST)
+	@RequestMapping(value = "/showSimulator", method = RequestMethod.GET)
 	public String getAllData(
 			@RequestParam(value = "country", required = false) Integer countryId,
-	//		@RequestParam(value = "unitIndex", required = false) String unitIndex,
-//			@RequestParam(value = "property", required = false) String propertyName,
+			@RequestParam(value = "unitIndex", required = false) String unitIndex,
+			@RequestParam(value = "property", required = false) String propertyName,
 			Model model) {
 		
-		
-		countryId=1;
-		String unitIndex="Energy";
-		String propertyName="Wheat";
-		
+		System.out.println("IN all data controller");
+
 		String propertyType = "";
 		if (unitIndex == "Energy") {
 			propertyType="ENERGY (MJ/kg)";
