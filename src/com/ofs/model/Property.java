@@ -9,19 +9,19 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="property")
+@Table(name = "property")
 public class Property {
 
 	@Id
 	@GeneratedValue
 	private int propertyId;
-	
+
 	private String propertyName;
-	
+
 	private Date createdDate;
-	
-	private int propertyType;
-	
+
+	private String propertyType;
+
 	private String propertyValue;
 
 	public int getPropertyId() {
@@ -48,11 +48,11 @@ public class Property {
 		this.createdDate = createdDate;
 	}
 
-	public int getPropertyType() {
+	public String getPropertyType() {
 		return propertyType;
 	}
 
-	public void setPropertyType(int propertyType) {
+	public void setPropertyType(String propertyType) {
 		this.propertyType = propertyType;
 	}
 
@@ -63,5 +63,5 @@ public class Property {
 	public void setPropertyValue(String propertyValue) {
 		this.propertyValue = propertyValue;
 	}
-	
+
 }

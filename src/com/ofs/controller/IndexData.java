@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ofs.model.CountryDetail;
+import com.ofs.model.Property;
 import com.ofs.service.CountryService;
+import com.ofs.service.PropertyService;
 
 /**
  * @author  Sagar, Amit
@@ -24,12 +26,22 @@ public class IndexData {
 	@Autowired
 	private CountryService countryService;
 	
+	@Autowired
+	private PropertyService propertyService;
+	
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
 	public String welcome(Model model) {
 		List<CountryDetail> countryList = countryService.getCountryData();
 		for(CountryDetail cdata:countryList){
 			System.out.println(cdata.getCountryName()+"--"+"--"+cdata.getCountryId());
 		}
+		
+		List<Property> propertyList = propertyService.getPropertyData();
+		for(Property pdata:propertyList){
+			System.out.println(pdata.getPropertyId()+"--"+pdata.getPropertyName()+"--"+"--"+pdata.getPropertyType());
+		}
+		
+		model.addAttribute("propertyList",propertyList);
 		model.addAttribute("countryList",countryList);
 		return "index";
 	}

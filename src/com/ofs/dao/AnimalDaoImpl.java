@@ -1,5 +1,6 @@
 package com.ofs.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Criteria;
@@ -31,5 +32,10 @@ public class AnimalDaoImpl implements AnimalDao {
 		return (List<AnimalData>) sessionFactory.getCurrentSession().createCriteria(AnimalData.class).
 				add(Restrictions.eq("countryId", 1)).list();
 	}
-	
+	@SuppressWarnings("unchecked")
+	public List<AnimalData> getMultipleCountryAnimalData(List<Integer> countryList){
+		System.out.println("Inside hibernate"+countryList+"--");
+		return (List<AnimalData>) sessionFactory.getCurrentSession().createCriteria(AnimalData.class).
+				add(Restrictions.in("countryId", countryList)).list();
+	}
 }

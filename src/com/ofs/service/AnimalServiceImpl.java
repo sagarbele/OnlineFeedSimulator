@@ -1,5 +1,6 @@
 package com.ofs.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,5 +34,7 @@ public class AnimalServiceImpl implements AnimalService {
 		return animalDao.getAnimalData(countryId);
 	}
 
-
+	public List<AnimalData>getMultipleCountryAnimalData(List<Integer> countryList){
+		return animalDao.getMultipleCountryAnimalData(countryList);
+	}
 }

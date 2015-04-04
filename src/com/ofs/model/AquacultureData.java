@@ -73,6 +73,14 @@ public class AquacultureData  implements Serializable{
 		this.nutritionProtein = nutritionProtein;
 	}
 
+	public CountryDetail getCountryDetail() {
+		return countryDetail;
+	}
+
+	public void setCountryDetail(CountryDetail countryDetail) {
+		this.countryDetail = countryDetail;
+	}
+
 
 	
 }

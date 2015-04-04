@@ -114,5 +114,11 @@ public class AnimalData implements Serializable {
 		this.countryId = countryId;
 	}
 
-	
+	public CountryDetail getCountryDetail() {
+		return countryDetail;
+	}
+
+	public void setCountryDetail(CountryDetail countryDetail) {
+		this.countryDetail = countryDetail;
+	}
 }
