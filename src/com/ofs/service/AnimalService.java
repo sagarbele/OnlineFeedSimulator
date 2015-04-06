@@ -1,6 +1,5 @@
 package com.ofs.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.ofs.model.AnimalData;

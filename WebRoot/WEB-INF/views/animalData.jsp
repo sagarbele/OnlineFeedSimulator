@@ -1,15 +1,14 @@
 
 <div>
-
-	<tr>
-		<th>Hi</th>
-	</tr>
 	<tr>
 		<td>${propertyValue }</td>
 	</tr>
 
 		<tr>
-			<td>${forms}</td>
+			<td>${animalRawData}</td>
+		</tr>
+		<tr>
+			<td>${aquacultureData}</td>
 		</tr>
 
 </div>
