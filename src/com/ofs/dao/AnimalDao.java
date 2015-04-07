@@ -16,4 +16,6 @@ public interface AnimalDao {
 	public List<AnimalData> getAnimalData(int countryId);
 
 	public List<AnimalData> getMultipleCountryAnimalData(List<Integer> countryList);
+	
+	public List<Integer> getYearList();
 }

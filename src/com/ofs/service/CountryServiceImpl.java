@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ofs.dao.CountryDao;
+import com.ofs.model.AnimalData;
 import com.ofs.model.CountryDetail;
 
 /**
@@ -29,5 +30,9 @@ public class CountryServiceImpl implements CountryService {
 	
 	public List<CountryDetail> getCountryData(int countryId) {
 		return countryDao.getCountryData(countryId);
+	}
+	
+	public List<String>getMultipleCountryList(List<Integer> countryList){
+		return countryDao.getMultipleCountryList(countryList);
 	}
 }

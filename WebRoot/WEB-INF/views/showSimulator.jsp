@@ -5,29 +5,80 @@
 <html>
 <head>
 <title>Online Feed Simulator</title>
+
+<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
 <script type="text/javascript">
+
+function regerateData() {
+	
+	var nfgRate = "";
+	for(index=1;index< ${animalListSize+1} ; index++){
+				var AnimalId=index.toString()+"animal";
+				var parameter = index.toString()+"-";
+				nfgRate=nfgRate.concat(parameter);
+				nfgRate= nfgRate.concat(document.getElementById(AnimalId).value);
+				if(index!=${animalListSize}){
+					nfgRate=nfgRate.concat(",");}
+
+	}
+
+	var country="${countryId}";
+	var property="${propertyName}";
+	var unitIndex="${unitIndex}";
+
+	jQuery.ajax({
+		type : "GET",
+		url : getContextPath() + "/scenarioRegenerateData.html",
+		data : ({
+			country : country,
+			unitIndex : unitIndex,
+			property : property,
+			nfgRate : nfgRate
+
+		}),
+		success : function(data) {
+
+			jQuery("#scenarioRegenerateData").html(data);
+
+		}
+	});
+
+}
+
 
 	function showResult() {
 		
-		var href = "";
-		var index=0;
-		for(index=0;index< animalList.size; index++){
-			href = href.concat(animalList.animalName);
+		var nfgRate = "";
+		for(index=1;index< ${animalListSize+1} ; index++){
+					var AnimalId=index.toString()+"animal";
+					var parameter = index.toString()+"-";
+					nfgRate=nfgRate.concat(parameter);
+					nfgRate= nfgRate.concat(document.getElementById(AnimalId).value);
+					if(index!=${animalListSize}){
+						nfgRate=nfgRate.concat(",");}
+	
 		}
-		alert(href);
-		/* 
+
 		window.location.href = getContextPath()
-				+ "/showSimulator.html?country=" + country + "&property="
-				+ property + "&unitIndex=" + unitIndex; */
+				+ "/finalReport.html?country=${countryId}&property=${propertyName}&unitIndex=${unitIndex}&nfgRate="+nfgRate; 
+	}
+	
+	function getContextPath() {
+		pn = location.pathname;
+		len = pn.indexOf("/", 1);
+		cp = pn.substring(0, len);
+		return cp;
 	}
 </script>
 
 </head>
 <body>
-
+<div>
 	<table align="left" border="1">
 		<tr>
-			<td>${propertyValue}</td>
+			<td>${propertyValue}</td>&nbsp;&nbsp;&nbsp;<td>${country }</td>
+			&nbsp;&nbsp;&nbsp;<td>${propertyName }</td>
+			&nbsp;&nbsp;&nbsp;<td>${unitIndex }</td>
 		</tr>
 		<tr>
 
@@ -52,8 +103,8 @@
 				<c:forEach items="${animalList}" var="anList" varStatus="varStatus">
 					<tr>
 						<td>${anList.animalName}</td>
-						<td><input type="text" id="${anList.animalId}"
-							name="${anList.animalId}" size="8" maxlength="7"></td>
+						<td><input type="text" id="${anList.animalId}animal"
+							name="${anList.animalId}animal" size="8" maxlength="20"></td>
 					</tr>
 				</c:forEach>
 			</c:when>
@@ -71,8 +122,12 @@
 		<tr>
 			<td>
 				<button type="button" onClick="showResult();">Show Results</button>
+				<button type="button" onClick="regerateData();">Get
+					Regenerate Graph</button>
 			</td>
-			</tr>
+		</tr>
 	</table>
+	</div>
+	<div name="scenarioRegenerateData" id="scenarioRegenerateData"></div>
 </body>
 </html>

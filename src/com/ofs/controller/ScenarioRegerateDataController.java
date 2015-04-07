@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ofs.model.AnimalData;
 import com.ofs.model.AquacultureData;
-import com.ofs.model.CountryDetail;
 import com.ofs.model.Property;
 import com.ofs.service.AnimalService;
 import com.ofs.service.AquacultureService;
@@ -27,7 +26,7 @@ import com.ofs.service.PropertyService;
  * 
  */
 @Controller
-public class AnimalDataController {
+public class ScenarioRegerateDataController {
 
 	@Autowired
 	private AnimalService animalService;
@@ -47,13 +46,14 @@ public class AnimalDataController {
 	 */
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/getData", method = RequestMethod.GET)
+	@RequestMapping(value = "/scenarioRegenerateData", method = RequestMethod.GET)
 	public String getAllData(
-			@RequestParam(value = "country", required = false) String countryIdList,
+			@RequestParam(value = "country", required = false) Integer countryId,
 			@RequestParam(value = "unitIndex", required = false) String unitIndex,
 			@RequestParam(value = "property", required = false) String propertyName,
+			@RequestParam(value = "nfgRate", required = false) String nfgRate,
 			Model model) {
-		System.out.println("countryId " + countryIdList + "--initIndex-"
+		System.out.println("countryId " + countryId + "--initIndex-"
 				+ unitIndex + "--propertyName-" + propertyName);
 
 		String propertyType = "";
@@ -75,37 +75,15 @@ public class AnimalDataController {
 		model.addAttribute("propertyValue", propertyValue);
 		model.addAttribute("propertyName", propertyName);
 		model.addAttribute("unitIndex", unitIndex);
+		model.addAttribute("nfgRate",nfgRate);
 		
 		/*
-		 * Get Country Parameters from page and convert them into List<Integer>
+		 * Get Animal Data
 		 */
-		List<String> countryList = Arrays.asList(countryIdList.split(","));
-		List<Integer> intCountryList = new ArrayList<Integer>(
-				countryList.size());
-		for (String myInt : countryList) {
-			intCountryList.add(Integer.valueOf(myInt));
-		}
-		/*
-		 * Fetch animal raw data for selected countries
-		 */
-		List<AnimalData> animalData = animalService
-				.getMultipleCountryAnimalData(intCountryList);
-		for (AnimalData data : animalData) {
-			System.out.println("-----" + "\n" + data.getAnimalCount() + "--"
-					+ data.getYear() + "--" + data.getCountryId());
-		}
-
-		/*
-		 * Get list of countries
-		 */
-		List<String> selectedCountryList = countryService.getMultipleCountryList(intCountryList);
-		System.out.println(selectedCountryList);
-		model.addAttribute("countryList", selectedCountryList);
+		List<AnimalData> animalData = animalService.getAnimalData(countryId);
+		model.addAttribute("countryId", countryId);
 		
 	
-		List<Integer> yearList = animalService.getYearList();
-		System.out.println(yearList);;
-		model.addAttribute("yearList", yearList);
 		/*
 		 * Convert Animal Data in Json Format
 		 */
@@ -139,12 +117,7 @@ public class AnimalDataController {
 		 * Get Aquaculture Data
 		 */
 		List<AquacultureData> aquacultureData = aquacultureService
-				.getMultipleCountryAquacultureData(intCountryList);
-		for (AquacultureData aqdata : aquacultureData) {
-			System.out.println("-----" + "\n" + aqdata.getNutritionEnergy()
-					+ "--" + aqdata.getYear() + "--" + aqdata.getCountryId());
-		}
-
+				.getAquacultureData(countryId);
 		/*
 		 * Convert Data in Json Format
 		 */
@@ -167,7 +140,7 @@ public class AnimalDataController {
 		responseAquaDetailsJson.put("aquacultureData", jsonArrayAquaData);
 		model.addAttribute("aquacultureData", jsonArrayAquaData);
 
-		return "animalData";
+		return "scenarioRegenerateData";
 	}
 
 }

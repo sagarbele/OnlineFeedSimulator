@@ -36,4 +36,8 @@ public class AnimalServiceImpl implements AnimalService {
 	public List<AnimalData>getMultipleCountryAnimalData(List<Integer> countryList){
 		return animalDao.getMultipleCountryAnimalData(countryList);
 	}
+	
+	public List<Integer> getYearList(){
+		return animalDao.getYearList();
+	}
 }

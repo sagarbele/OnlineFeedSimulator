@@ -1,7 +1,5 @@
 package com.ofs.controller;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.json.simple.JSONArray;
@@ -14,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ofs.model.AnimalData;
+import com.ofs.model.AnimalList;
 import com.ofs.model.AquacultureData;
 import com.ofs.model.CountryDetail;
 import com.ofs.model.Property;
+import com.ofs.service.AnimalListService;
 import com.ofs.service.AnimalService;
 import com.ofs.service.AquacultureService;
 import com.ofs.service.CountryService;
@@ -27,19 +27,22 @@ import com.ofs.service.PropertyService;
  * 
  */
 @Controller
-public class AnimalDataController {
+public class SendReport {
 
 	@Autowired
 	private AnimalService animalService;
 
 	@Autowired
+	private AquacultureService aquacultureService;
+
+	@Autowired
 	private CountryService countryService;
 
 	@Autowired
-	private PropertyService propertyService;
-
+	private AnimalListService animalListService;
+	
 	@Autowired
-	private AquacultureService aquacultureService;
+	private PropertyService propertyService;
 
 	/*
 	 * @RequestMapping(value = "/index", method = RequestMethod.GET) public
@@ -47,70 +50,60 @@ public class AnimalDataController {
 	 */
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/getData", method = RequestMethod.GET)
+	@RequestMapping(value = "/finalReport", method = RequestMethod.GET)
 	public String getAllData(
-			@RequestParam(value = "country", required = false) String countryIdList,
+			@RequestParam(value = "country", required = false) Integer countryId,
 			@RequestParam(value = "unitIndex", required = false) String unitIndex,
 			@RequestParam(value = "property", required = false) String propertyName,
+			@RequestParam(value = "nfgRate", required = false) String nfgRate,
 			Model model) {
-		System.out.println("countryId " + countryIdList + "--initIndex-"
-				+ unitIndex + "--propertyName-" + propertyName);
 
+		/*
+		 * Get Property Value
+		 */
 		String propertyType = "";
 		if (unitIndex.equals("Energy")) {
 			propertyType = "ENERGY (MJ/kg)";
 		}
+
 		if (unitIndex.equals("Protein")) {
 			propertyType = "PROTEIN (%)";
 		}
-
 		List<Property> propertyList = propertyService.getPropertyData(
 				propertyName, propertyType);
 		String propertyValue = "";
 		for (Property pdata : propertyList) {
 			propertyValue = pdata.getPropertyValue();
-			propertyName = pdata.getPropertyName();
-			
 		}
+
 		model.addAttribute("propertyValue", propertyValue);
 		model.addAttribute("propertyName", propertyName);
 		model.addAttribute("unitIndex", unitIndex);
-		
+		model.addAttribute("nfgRate",nfgRate);
+		model.addAttribute("countryId",countryId);
 		/*
-		 * Get Country Parameters from page and convert them into List<Integer>
+		 * Get Animal Data for selected countries
 		 */
-		List<String> countryList = Arrays.asList(countryIdList.split(","));
-		List<Integer> intCountryList = new ArrayList<Integer>(
-				countryList.size());
-		for (String myInt : countryList) {
-			intCountryList.add(Integer.valueOf(myInt));
-		}
-		/*
-		 * Fetch animal raw data for selected countries
-		 */
-		List<AnimalData> animalData = animalService
-				.getMultipleCountryAnimalData(intCountryList);
-		for (AnimalData data : animalData) {
-			System.out.println("-----" + "\n" + data.getAnimalCount() + "--"
-					+ data.getYear() + "--" + data.getCountryId());
-		}
+		List<AnimalData> animalData = animalService.getAnimalData(countryId);
 
 		/*
 		 * Get list of countries
 		 */
-		List<String> selectedCountryList = countryService.getMultipleCountryList(intCountryList);
-		System.out.println(selectedCountryList);
-		model.addAttribute("countryList", selectedCountryList);
+		List<CountryDetail> countryList = countryService.getCountryData();
+		model.addAttribute("countryList", countryList);
 		
-	
-		List<Integer> yearList = animalService.getYearList();
-		System.out.println(yearList);;
-		model.addAttribute("yearList", yearList);
 		/*
-		 * Convert Animal Data in Json Format
+		 * Get Animal List
+		 */
+		List<AnimalList> animalList = animalListService.getAnimalList();
+		model.addAttribute("animalList", animalList);
+		model.addAttribute("animalListSize", animalList.size());
+		
+		/*
+		 * Convert data in json format
 		 */
 		JSONObject responseDetailsJson = new JSONObject();
-		JSONArray jsonArrayAnimalData = new JSONArray();
+		JSONArray jsonArray = new JSONArray();
 
 		for (AnimalData anmd : animalData) {
 			JSONObject formDetailsJson = new JSONObject();
@@ -128,22 +121,18 @@ public class AnimalDataController {
 					.toString());
 			formDetailsJson.put("proteinUnitIndex", anmd.getProteinUnitIndex()
 					.toString());
-			jsonArrayAnimalData.add(formDetailsJson);
+			jsonArray.add(formDetailsJson);
 		}
 
 		// Here you can see the data in json format
-		responseDetailsJson.put("animalRawData", jsonArrayAnimalData);
-		model.addAttribute("animalRawData", jsonArrayAnimalData);
+		responseDetailsJson.put("animalRawData", jsonArray);
+		model.addAttribute("animalRawData", jsonArray);
 
 		/*
-		 * Get Aquaculture Data
+		 * Get Aquaculture Data for selected countries
 		 */
 		List<AquacultureData> aquacultureData = aquacultureService
-				.getMultipleCountryAquacultureData(intCountryList);
-		for (AquacultureData aqdata : aquacultureData) {
-			System.out.println("-----" + "\n" + aqdata.getNutritionEnergy()
-					+ "--" + aqdata.getYear() + "--" + aqdata.getCountryId());
-		}
+				.getAquacultureData(countryId);
 
 		/*
 		 * Convert Data in Json Format
@@ -167,7 +156,7 @@ public class AnimalDataController {
 		responseAquaDetailsJson.put("aquacultureData", jsonArrayAquaData);
 		model.addAttribute("aquacultureData", jsonArrayAquaData);
 
-		return "animalData";
+		return "finalReport";
 	}
 
 }

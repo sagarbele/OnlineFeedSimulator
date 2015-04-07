@@ -75,12 +75,15 @@ public class AnimalAllData {
 			propertyValue = pdata.getPropertyValue();
 		}
 		model.addAttribute("propertyValue", propertyValue);
+		model.addAttribute("unitIndex", unitIndex);
+		model.addAttribute("propertyName", propertyName);
+		model.addAttribute("country",countryId);
 
 		/*
 		 * Get Animal Data for selected countries
 		 */
 		List<AnimalData> animalData = animalService.getAnimalData(countryId);
-
+		model.addAttribute("countryId", countryId);
 		/*
 		 * Get list of countries
 		 */
@@ -92,7 +95,7 @@ public class AnimalAllData {
 		 */
 		List<AnimalList> animalList = animalListService.getAnimalList();
 		model.addAttribute("animalList", animalList);
-		
+		model.addAttribute("animalListSize", animalList.size());
 		
 		/*
 		 * Convert data in json format
