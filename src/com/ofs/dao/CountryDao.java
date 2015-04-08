@@ -17,4 +17,6 @@ public interface CountryDao {
 	public List<CountryDetail> getCountryData(int countryId);
 	
 	public List<String> getMultipleCountryList(List<Integer> countryList);
+	
+	public List<CountryDetail> getMultipleCountryListObject(List<Integer> countryList);
 }

@@ -12,10 +12,9 @@ import org.springframework.stereotype.Repository;
 import com.ofs.model.AnimalData;
 import com.ofs.model.CountryDetail;
 
-
 /**
- * @author  Sagar, Amit
- *
+ * @author Sagar, Amit
+ * 
  */
 @Repository("countryDao")
 public class CountryDaoImpl implements CountryDao {
@@ -25,17 +24,30 @@ public class CountryDaoImpl implements CountryDao {
 
 	@SuppressWarnings("unchecked")
 	public List<CountryDetail> getCountryData() {
-		return (List<CountryDetail>) sessionFactory.getCurrentSession().createCriteria(CountryDetail.class).list();
+		return (List<CountryDetail>) sessionFactory.getCurrentSession()
+				.createCriteria(CountryDetail.class).list();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<CountryDetail> getCountryData(int countryId) {
-		return (List<CountryDetail>) sessionFactory.getCurrentSession().createCriteria(CountryDetail.class).list();
+		return (List<CountryDetail>) sessionFactory.getCurrentSession()
+				.createCriteria(CountryDetail.class).list();
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<String> getMultipleCountryList(List<Integer> countryList){
-		return (List<String>) sessionFactory.getCurrentSession().createCriteria(CountryDetail.class).
-				add(Restrictions.in("countryId", countryList)).setProjection(Projections.property("countryName")).list();
+	public List<String> getMultipleCountryList(List<Integer> countryList) {
+		return (List<String>) sessionFactory.getCurrentSession()
+				.createCriteria(CountryDetail.class)
+				.add(Restrictions.in("countryId", countryList))
+				.setProjection(Projections.property("countryName")).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<CountryDetail> getMultipleCountryListObject(
+			List<Integer> countryList) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(
+				CountryDetail.class);
+		criteria.add(Restrictions.in("countryId", countryList));
+		return criteria.list();
 	}
 }

@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ofs.model.AnimalData;
+import com.ofs.model.AnimalList;
 import com.ofs.model.AquacultureData;
 import com.ofs.model.CountryDetail;
 import com.ofs.model.Property;
+import com.ofs.service.AnimalListService;
 import com.ofs.service.AnimalService;
 import com.ofs.service.AquacultureService;
 import com.ofs.service.CountryService;
@@ -37,6 +39,9 @@ public class AnimalDataController {
 
 	@Autowired
 	private PropertyService propertyService;
+	
+	@Autowired
+	private AnimalListService animalListService;
 
 	@Autowired
 	private AquacultureService aquacultureService;
@@ -70,12 +75,12 @@ public class AnimalDataController {
 		for (Property pdata : propertyList) {
 			propertyValue = pdata.getPropertyValue();
 			propertyName = pdata.getPropertyName();
-			
+
 		}
 		model.addAttribute("propertyValue", propertyValue);
 		model.addAttribute("propertyName", propertyName);
 		model.addAttribute("unitIndex", unitIndex);
-		
+
 		/*
 		 * Get Country Parameters from page and convert them into List<Integer>
 		 */
@@ -97,14 +102,34 @@ public class AnimalDataController {
 
 		/*
 		 * Get list of countries
-		 */
-		List<String> selectedCountryList = countryService.getMultipleCountryList(intCountryList);
+		 *
+		List<String> selectedCountryList = countryService
+				.getMultipleCountryList(intCountryList);
 		System.out.println(selectedCountryList);
-		model.addAttribute("countryList", selectedCountryList);
+		model.addAttribute("countryList", selectedCountryList); */
 		
+		
+		List<CountryDetail> selectedCountryList = countryService.getMultipleCountryListObject(intCountryList);
+		String countryNames = "";
+		for(CountryDetail s :selectedCountryList )
+		{
+			countryNames= countryNames.concat(s.getCountryName()+",");
+		}
+		model.addAttribute("countryList",countryNames);
 	
+		/*
+		 * Get Animal List
+		 */
+		List<AnimalList> animalList = animalListService.getAnimalList();
+		String animalNames = "";
+		for(AnimalList anmList :animalList )
+		{
+			animalNames= animalNames.concat(anmList.getAnimalName()+",");
+		}
+	
+		model.addAttribute("animalList", animalNames);
+		
 		List<Integer> yearList = animalService.getYearList();
-		System.out.println(yearList);;
 		model.addAttribute("yearList", yearList);
 		/*
 		 * Convert Animal Data in Json Format
@@ -145,6 +170,8 @@ public class AnimalDataController {
 					+ "--" + aqdata.getYear() + "--" + aqdata.getCountryId());
 		}
 
+
+		
 		/*
 		 * Convert Data in Json Format
 		 */
@@ -165,6 +192,7 @@ public class AnimalDataController {
 
 		// Here you can see the data in json format
 		responseAquaDetailsJson.put("aquacultureData", jsonArrayAquaData);
+		System.out.println(jsonArrayAquaData);
 		model.addAttribute("aquacultureData", jsonArrayAquaData);
 
 		return "animalData";

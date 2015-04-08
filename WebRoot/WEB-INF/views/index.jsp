@@ -2,53 +2,71 @@
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<link rel="shortcut icon" href="assets/ico/favicon.png">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>OnlineFeedSimulator</title>
+<!-- Bootstrap core CSS -->
+<link href="assets/css/bootstrap.css" rel="stylesheet">
+<!-- Jasny Bootstrap-Extension CSS -->
+<link href="assets/css/jasny-bootstrap.css" rel="stylesheet">
+<link href="assets/css/bootstrap-select.css" rel="stylesheet">
+<link href="assets/css/bootstrap-datetimepicker.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="assets/css/main.css" rel="stylesheet">
+<link
+	href='https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic'
+	rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,700'
+	rel='stylesheet' type='text/css'>
 
-<script type="text/javascript" src="http://code.jquery.com/jquery.js"></script>
-<!-- 
-	<script type="text/javascript">
-	
-		$(document).ready(function() {
-	
-			$("button").click(function() {
-	
-				var favorite = [];
-	
-				$.each($("input[name='cList']:checked"), function() {
-					favorite.push($(this).val());
-				});
-				alert("My favourite sports are: " + favorite.join(", "));
-			});
-		});
-	</script>
-	 -->
+<script type="text/javascript" src="assets/js/jquery.min.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap.js"></script>
+<script type="text/javascript" src="assets/js/jasny-bootstrap.js"></script>
+<script type="text/javascript" src="assets/js/bootstrap-select.js"></script>
+<script type="text/javascript" src="assets/js/moment.js"></script>
+<script type="text/javascript" src="assets/js/highcharts.js"></script>
+<script type="text/javascript" src="assets/js/grid-light.js"></script>
+<script type="text/javascript"
+	src="assets/js/bootstrap-datetimepicker.min.js"></script>
+
+<script type="text/javascript">
+	$(document)
+			.ready(
+					function() {
+
+						$('.selectCountry').selectpicker({
+							size : 'auto',
+							maxOptions : 3
+						});
+						$('.selectUnitIndex').selectpicker({
+							size : 'auto',
+							width : '130px'
+						});
+						$('.energyEquivalent').selectpicker({
+							size : 'auto',
+							width : '150px'
+						});
+	});
+
+</script>
+
+
 <script type="text/javascript">
 	function getData() {
+
 		var country = "";
-		$.each($("input[name='cList']:checked"), function() {
-			var con = $(this).val().trim().toString();
-			country = country.concat(con);
+		$.each($(".selectCountry option:selected"), function() {
+			country = country.concat($(this).val());
 			country = country.concat(",");
 		});
 
-		var property = "";
-		$.each($("input[name='pList']:checked"), function() {
-			var prop = $(this).val().trim().toString();
-			property = property.concat(prop);
-		});
+		var property = $(".energyEquivalent option:selected").val().trim()
+				.toString();
 
-		var unitIndex = "";
-		$.each($("input[name='unitIndex']:checked"), function() {
-			var uIndex = $(this).val().trim().toString();
-			unitIndex = unitIndex.concat(uIndex);
-		});
-
-		alert(unitIndex);
-		alert(property);
-		alert(country);
+		var unitIndex = $(".selectUnitIndex option:selected").val().trim()
+				.toString();
 
 		jQuery.ajax({
 			type : "GET",
@@ -77,22 +95,16 @@
 
 	function getScenarioData() {
 		var country = "";
-		$.each($("input[name='cList']:checked"), function() {
-			var con = $(this).val().trim().toString();
-			country = country.concat(con);
+		$.each($(".selectCountry option:selected"), function() {
+			country = country.concat($(this).val());
+			country = country.concat(",");
 		});
 
-		var property = "";
-		$.each($("input[name='pList']:checked"), function() {
-			var prop = $(this).val().trim().toString();
-			property = property.concat(prop);
-		});
+		var property = $(".energyEquivalent option:selected").val().trim()
+				.toString();
 
-		var unitIndex = "";
-		$.each($("input[name='unitIndex']:checked"), function() {
-			var uIndex = $(this).val().trim().toString();
-			unitIndex = unitIndex.concat(uIndex);
-		});
+		var unitIndex = $(".selectUnitIndex option:selected").val().trim()
+				.toString();
 
 		alert(unitIndex);
 		alert(property);
@@ -107,54 +119,99 @@
 
 </head>
 <body>
-	<form class="box" method="post" id="countryForm" name="countryForm">
-		<table align="left" border="1">
-			<tr>
-				<th>Hi ${propertyValue}</th>
-			</tr>
-			<tr>
-				<td><c:choose>
-						<c:when test="${not empty countryList}">
-							<c:forEach items="${countryList}" var="country"
-								varStatus="varStatus">
+<body id="pageBody" style="background-color: #D7D6D4">
+<div id="wrapper">
+    <div id="navigation" class="banner" style="">
+        <div>
+            <div class="container">
+                <div id="c134044" class="csc-default">
+                    <p class="bodytext"><a href="http://www.amis-outlook.org/" title="AMIS homepage" class="internal-link"><img
+                            alt="AMIS homepage" src="assets/img/amis_logo.jpg" height="129" width="260"></a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <ol class="breadcrumb">
+        <li><a class="active">Online Feed Simulator</a></li>
+    </ol>
 
-								<input type="checkbox" id="cList" name="cList"
-									value="${country.countryId}">${country.countryName} &nbsp;&nbsp;&nbsp;&nbsp;
-							
-					</c:forEach>
+	<div class="container" id="page" style="padding-top: 60px">
+		<div class="row">
+			<div class="col-md-4" id="formTabOne">
+				<div class="form-group" id="countryIdList">
+					<label for="country">Select Countries</label> <br /> <select
+						class="selectCountry" id="country" multiple="multiple"
+						title='Choose one or more..' data-live-search="true">
+						<c:choose>
+							<c:when test="${not empty countryList}">
+								<c:forEach items="${countryList}" var="country"
+									varStatus="varStatus">
+									<option name="cList" value="${country.countryId}">
+										${country.countryName}</option>
+								</c:forEach>
+							</c:when>
+						</c:choose>
 
-						</c:when>
-					</c:choose></td>
-			</tr>
-			<tr>
-				<td><c:choose>
-						<c:when test="${not empty propertyList}">
-							<c:forEach items="${propertyList}" var="property"
-								varStatus="varStatus">
 
-								<input type="checkbox" name="pList" id="pList"
-									value="${property.propertyName}">${property.propertyName} &nbsp;&nbsp;&nbsp;&nbsp;
+					</select>
+				</div>
+			</div>
+			<div class="col-md-4" id="formTabTwo">
+				<div class="form-group" id="eeFormGroup">
+					<label for="selectEnergyEquivalent">Select Energy
+						Equivalent</label> <br /> <select class="energyEquivalent"
+						id="selectEnergyEquivalent" title='Choose one or more..'>
+						<option selected="selected">Select one</option>
+						<c:choose>
+							<c:when test="${not empty propertyList}">
+								<c:forEach items="${propertyList}" var="property"
+									varStatus="varStatus">
+
+									<option name="pList" value="${property.propertyName}">
+										${property.propertyName}</option>
+								</c:forEach>
+							</c:when>
+						</c:choose>
+					</select>
+				</div>
+			</div>
+			<div class="col-md-4" id="formTabThree">
+				<div class="form-group" id="unitFormGroup">
+					<label for="selectIndex">Select Unit Index</label> <br /> <select
+						class="selectUnitIndex" id="selectIndex"
+						title='Choose one or more..'>
+						<option selected="selected">Select one</option>
+						<option value="Energy">Energy(kcal)</option>
+						<option value="Protein">Protein</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row" style="margin-top: 30px">
+			<div class="col-md-1">
+				<button type="button" class="btn btn-default" onClick="getData();">Visualize</button>
+			</div>
 			
-					</c:forEach>
-						</c:when>
-					</c:choose></td>
-			</tr>
-			<tr>
-				<td><input type="checkbox" id="unitIndex" name="unitIndex"
-					value="Protein">Protein <input type="checkbox"
-					id="unitIndex" name="unitIndex" value="Energy">Energy</td>
-			</tr>
-			<tr>
-				<td>
-					<!-- <input type="submit" value="Scenario Analysis" class="ui-button ui-widget ui-state-default ui-corner-all" />  -->
-					<button type="button" onClick="getScenarioData();">Scenario
-						Analysis1</button>
-					<button type="button" onClick="getData();">Get
-						Graph/Charts</button>
-				</td>
-			</tr>
-		</table>
-	</form>
-	<div name="animalData" id="animalData"></div>
+			<div class="col-md-1" style="margin-left: 20px">
+				<button type="button" class="btn btn-default"
+					onClick="getScenarioData();">Scenario Analysis</button>
+			</div>
+			<div class="col-md-6"></div>
+		</div>
+		
+		<div class="row" style="padding-top: 40px">
+			<div class="col-md-12" id="lineChartDiv"></div>
+		</div>
+		<div class="row" style="padding-top: 20px">
+			<div class="col-md-12" id="pieChartDiv"></div>
+		</div>
+		<div name="animalData" id="animalData"></div>
+	</div>
+	</div>
+
+</body>
+
+
 </body>
 </html>
