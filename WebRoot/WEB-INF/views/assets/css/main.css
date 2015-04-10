@@ -1,5 +1,6 @@
 div#wrapper {
     width: 1000px;
+    min-height: 1450px;
     margin: 0px auto 15px;
     background-color: #FFF;
 }
