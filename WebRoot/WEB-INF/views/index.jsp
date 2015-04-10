@@ -106,9 +106,9 @@
 		var unitIndex = $(".selectUnitIndex option:selected").val().trim()
 				.toString();
 
-		alert(unitIndex);
-		alert(property);
-		alert(country);
+	//	alert(unitIndex);
+	//	alert(property);
+	//	alert(country);
 
 		window.location.href = getContextPath()
 				+ "/showSimulator.html?country=" + country + "&property="
@@ -192,26 +192,18 @@
 			<div class="col-md-1">
 				<button type="button" class="btn btn-default" onClick="getData();">Visualize</button>
 			</div>
-			
+		<!--	
 			<div class="col-md-1" style="margin-left: 20px">
 				<button type="button" class="btn btn-default"
 					onClick="getScenarioData();">Scenario Analysis</button>
-			</div>
+			</div> -->
 			<div class="col-md-6"></div>
 		</div>
 		
-		<div class="row" style="padding-top: 40px">
-			<div class="col-md-12" id="lineChartDiv"></div>
-		</div>
-		<div class="row" style="padding-top: 20px">
-			<div class="col-md-12" id="pieChartDiv"></div>
-		</div>
 		<div name="animalData" id="animalData"></div>
 	</div>
 	</div>
 
 </body>
-
-
 </body>
 </html>
