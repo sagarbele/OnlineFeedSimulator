@@ -11,6 +11,7 @@
 <link href="assets/css/bootstrap.css" rel="stylesheet">
 <!-- Jasny Bootstrap-Extension CSS -->
 <link href="assets/css/jasny-bootstrap.css" rel="stylesheet">
+<link href="assets/css/bordered.css" rel="stylesheet">
 <link href="assets/css/bootstrap-select.css" rel="stylesheet">
 <link href="assets/css/bootstrap-datetimepicker.css" rel="stylesheet">
 <!-- Custom styles for this template -->
@@ -97,7 +98,6 @@
 		var country = "";
 		$.each($(".selectCountry option:selected"), function() {
 			country = country.concat($(this).val());
-			country = country.concat(",");
 		});
 
 		var property = $(".energyEquivalent option:selected").val().trim()
@@ -105,10 +105,6 @@
 
 		var unitIndex = $(".selectUnitIndex option:selected").val().trim()
 				.toString();
-
-	//	alert(unitIndex);
-	//	alert(property);
-	//	alert(country);
 
 		window.location.href = getContextPath()
 				+ "/showSimulator.html?country=" + country + "&property="
@@ -192,11 +188,11 @@
 			<div class="col-md-1">
 				<button type="button" class="btn btn-default" onClick="getData();">Visualize</button>
 			</div>
-		<!--	
+			
 			<div class="col-md-1" style="margin-left: 20px">
 				<button type="button" class="btn btn-default"
 					onClick="getScenarioData();">Scenario Analysis</button>
-			</div> -->
+			</div> 
 			<div class="col-md-6"></div>
 		</div>
 		

@@ -12,4 +12,6 @@ import com.ofs.model.CountryDetail;
 public interface AnimalListService {
 	
 	public List<AnimalList> getAnimalList();
+	
+	public List<String> getAnimalNameList();
 }

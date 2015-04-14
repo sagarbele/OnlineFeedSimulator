@@ -11,4 +11,6 @@ import com.ofs.model.AnimalList;
 public interface AnimalListDao {
 
 	public List<AnimalList> getAnimalList();
+	
+	public List<String> getAnimalNameList();
 }

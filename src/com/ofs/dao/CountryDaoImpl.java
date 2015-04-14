@@ -31,7 +31,8 @@ public class CountryDaoImpl implements CountryDao {
 	@SuppressWarnings("unchecked")
 	public List<CountryDetail> getCountryData(int countryId) {
 		return (List<CountryDetail>) sessionFactory.getCurrentSession()
-				.createCriteria(CountryDetail.class).list();
+				.createCriteria(CountryDetail.class)
+				.add(Restrictions.eq("countryId", countryId)).list();
 	}
 
 	@SuppressWarnings("unchecked")

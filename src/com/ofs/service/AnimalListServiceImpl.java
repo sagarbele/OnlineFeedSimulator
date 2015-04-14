@@ -27,4 +27,8 @@ public class AnimalListServiceImpl implements AnimalListService {
 		return animalListDao.getAnimalList();
 	}
 	
+	public List<String> getAnimalNameList(){
+		return animalListDao.getAnimalNameList();
+	}
+	
 }
