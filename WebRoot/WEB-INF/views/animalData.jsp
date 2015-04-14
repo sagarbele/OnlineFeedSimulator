@@ -63,7 +63,7 @@
 					}
 					else
 					{
-					nutrition = nutrition * 0.345; 
+					nutrition = nutrition * 35600; 
 					
 					}
 				//aqua
@@ -96,7 +96,7 @@
 							+ yearNo + "-" + nutrition * 0.319 + "--"
 							+ arrYears.length); */
 					$('#table' + (countryIndex + 1))
-							.append(
+							.prepend(
 									'<tr>'
 											+ '<th><a data-toggle="collapse" href="#collapseExample'
 											+ (countryIndex + 1)
@@ -110,7 +110,7 @@
 				} else {
 					/*console.log(countryIndex + countryName + yearIndex + "-"
 							+ yearNo + "-" + nutrition * 0.319); */
-					$('#tableData' + (countryIndex + 1)).append(
+					$('#tableData' + (countryIndex + 1)).prepend(
 							'<tr>' + '<td>' + countryName + '</td>' + '<td>'
 									+ yearNo + '</td>' + '<td>'
 									+ (nutrition) + '</td>' + '</tr>');
@@ -165,7 +165,7 @@
 						}
 					}
 				}
-				resultArray.push(nutritionProtein * 0.345 + aquaNutritionProtein*1);  // Multiply by 10k to show it in graph
+				resultArray.push(nutritionProtein * 35600 + aquaNutritionProtein*1);  // Multiply by 10k to show it in graph
 			}
 
 		}
@@ -384,7 +384,7 @@
 											}
 										}
 									}
-									resultArray.push(nutritionProtein * 0.345);
+									resultArray.push(nutritionProtein * 35600);
 								}
 								for ( var aqua_increment in aquacultureData) {
 									if (countryName == aquacultureData[aqua_increment].countryName) {

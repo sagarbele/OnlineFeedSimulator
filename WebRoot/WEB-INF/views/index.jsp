@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -37,18 +37,58 @@
 			.ready(
 					function() {
 
-						$('.selectCountry').selectpicker({
+						$('#selectCountry').selectpicker({
 							size : 'auto',
 							maxOptions : 3
 						});
-						$('.selectUnitIndex').selectpicker({
+						$('#selectIndex').selectpicker({
 							size : 'auto',
 							width : '130px'
 						});
-						$('.energyEquivalent').selectpicker({
+						$('#selectEnergyEquivalent').selectpicker({
 							size : 'auto',
 							width : '150px'
 						});
+
+
+                        if($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!="" && $('#selectIndex').val()!="" && $('#selectCountry').val().length>1) {
+                        $('#scenarioAnalysis').prop('disabled', true);
+                        $('#visualize').prop('disabled', false);
+                        console.log('disabled: '+$('#selectCountry').val().length);
+                        }
+                        else if ($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!="" && $('#selectIndex').val()!="" && $('#selectCountry').val().length<2){
+                        $('#scenarioAnalysis').prop('disabled', false);
+                        $('#visualize').prop('disabled', false);
+                        console.log('enabled: '+$('#selectCountry').val().length);
+                        }
+                        else
+                        {
+                        $('#scenarioAnalysis').prop('disabled', true);
+                        $('#visualize').prop('disabled', true);
+                        }
+
+                        $('.selectBox').change(function() {
+
+                            if($('#selectCountry').val()!=null &&  $('#selectEnergyEquivalent').val()!="" && $('#selectIndex').val()!="" && $('#selectCountry').val().length>1) {
+                               $('#scenarioAnalysis').prop('disabled', true);
+                               $('#visualize').prop('disabled', false);
+                               console.log('disabled: '+$('#selectCountry').val().length);
+                            }
+                            else if ($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!="" && $('#selectIndex').val()!="" && $('#selectCountry').val().length<2){
+                               $('#scenarioAnalysis').prop('disabled', false);
+                               $('#visualize').prop('disabled', false);
+                               console.log('enabled: '+$('#selectCountry').val().length);
+                            }
+                            else
+                            {
+                               $('#scenarioAnalysis').prop('disabled', true);
+                               $('#visualize').prop('disabled', true);
+                            }
+
+                            console.log($('#selectEnergyEquivalent').val());
+
+                        });
+
 	});
 
 </script>
@@ -58,15 +98,15 @@
 	function getData() {
 
 		var country = "";
-		$.each($(".selectCountry option:selected"), function() {
+		$.each($("#selectCountry option:selected"), function() {
 			country = country.concat($(this).val());
 			country = country.concat(",");
 		});
 
-		var property = $(".energyEquivalent option:selected").val().trim()
+		var property = $("#selectEnergyEquivalent option:selected").val().trim()
 				.toString();
 
-		var unitIndex = $(".selectUnitIndex option:selected").val().trim()
+		var unitIndex = $("#selectIndex option:selected").val().trim()
 				.toString();
 
 		jQuery.ajax({
@@ -96,14 +136,14 @@
 
 	function getScenarioData() {
 		var country = "";
-		$.each($(".selectCountry option:selected"), function() {
+		$.each($("#selectCountry option:selected"), function() {
 			country = country.concat($(this).val());
 		});
 
-		var property = $(".energyEquivalent option:selected").val().trim()
+		var property = $("#selectEnergyEquivalent option:selected").val().trim()
 				.toString();
 
-		var unitIndex = $(".selectUnitIndex option:selected").val().trim()
+		var unitIndex = $("#selectIndex option:selected").val().trim()
 				.toString();
 
 		window.location.href = getContextPath()
@@ -135,8 +175,8 @@
 		<div class="row">
 			<div class="col-md-4" id="formTabOne">
 				<div class="form-group" id="countryIdList">
-					<label for="country">Select Countries</label> <br /> <select
-						class="selectCountry" id="country" multiple="multiple"
+					<label for="selectCountry">Select Countries</label> <br /> <select
+						id="selectCountry" multiple="multiple" class="selectBox"
 						title='Choose one or more..' data-live-search="true">
 						<c:choose>
 							<c:when test="${not empty countryList}">
@@ -155,9 +195,9 @@
 			<div class="col-md-4" id="formTabTwo">
 				<div class="form-group" id="eeFormGroup">
 					<label for="selectEnergyEquivalent">Select Energy
-						Equivalent</label> <br /> <select class="energyEquivalent"
+						Equivalent</label> <br /> <select class="selectBox"
 						id="selectEnergyEquivalent" title='Choose one or more..'>
-						<option selected="selected">Select one</option>
+						<option selected="selected" value="">Select one</option>
 						<c:choose>
 							<c:when test="${not empty propertyList}">
 								<c:forEach items="${propertyList}" var="property"
@@ -173,10 +213,10 @@
 			</div>
 			<div class="col-md-4" id="formTabThree">
 				<div class="form-group" id="unitFormGroup">
-					<label for="selectIndex">Select Unit Index</label> <br /> <select
-						class="selectUnitIndex" id="selectIndex"
-						title='Choose one or more..'>
-						<option selected="selected">Select one</option>
+					<label for="selectIndex">Select Unit Index</label><br/>
+                    <select
+						class="selectBox" id="selectIndex">
+						<option selected="selected" value="">Select one</option>
 						<option value="Energy">Energy(kcal)</option>
 						<option value="Protein">Protein</option>
 					</select>
@@ -186,11 +226,11 @@
 		
 		<div class="row" style="margin-top: 30px">
 			<div class="col-md-1">
-				<button type="button" class="btn btn-default" onClick="getData();">Visualize</button>
+				<button type="button" id="visualize" class="btn btn-default" onClick="getData();">Visualize</button>
 			</div>
 			
 			<div class="col-md-1" style="margin-left: 20px">
-				<button type="button" class="btn btn-default"
+				<button type="button" class="btn btn-default" id="scenarioAnalysis"
 					onClick="getScenarioData();">Scenario Analysis</button>
 			</div> 
 			<div class="col-md-6"></div>

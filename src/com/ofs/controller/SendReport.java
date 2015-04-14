@@ -87,18 +87,37 @@ public class SendReport {
 		List<AnimalData> animalData = animalService.getAnimalData(countryId);
 
 		/*
-		 * Get list of countries
+		 * Get list of countries with country Name
 		 */
-		List<CountryDetail> countryList = countryService.getCountryData();
-		model.addAttribute("countryList", countryList);
+		
+		List<CountryDetail> countryList = countryService.getCountryData(countryId);
+		for(CountryDetail cData :countryList){
+			model.addAttribute("countryName", cData.getCountryName());
+		}
+		
+		
+		/*
+		 * Get Year List
+		 */
+		List<Integer> yearList = animalService.getYearList();
+		model.addAttribute("yearList", yearList);
+		
+		/*
+		 * Get Animal Name list
+		 */
+		List<String> animalNameList = animalListService.getAnimalNameList();
+		model.addAttribute("animalNameList", animalNameList);
 		
 		/*
 		 * Get Animal List
 		 */
 		List<AnimalList> animalList = animalListService.getAnimalList();
-		model.addAttribute("animalList", animalList);
-		model.addAttribute("animalListSize", animalList.size());
-		
+		String animalNames = "";
+		for(AnimalList anmList :animalList )
+		{
+			animalNames= animalNames.concat(anmList.getAnimalName()+",");
+		}
+		model.addAttribute("animalList", animalNames);
 		/*
 		 * Convert data in json format
 		 */

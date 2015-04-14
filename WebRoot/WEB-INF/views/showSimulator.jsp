@@ -12,6 +12,7 @@
 <!-- Jasny Bootstrap-Extension CSS -->
 <link href="assets/css/jasny-bootstrap.css" rel="stylesheet">
 <link href="assets/css/bootstrap-select.css" rel="stylesheet">
+<link href="assets/css/bordered.css" rel="stylesheet">
 <link href="assets/css/bootstrap-datetimepicker.css" rel="stylesheet">
 <!-- Custom styles for this template -->
 <link href="assets/css/main.css" rel="stylesheet">
@@ -35,26 +36,12 @@
 <script type="text/javascript">
 function regerateData() {
 	
-	var nfgRate = "";
-	for(index=1;index< ${animalListSize+1} ; index++){
-				var AnimalId=index.toString()+"animal";
-				var parameter = index.toString()+"-";
-				nfgRate=nfgRate.concat(parameter);
-				nfgRate= nfgRate.concat(document.getElementById(AnimalId).value);
-				if(index!=${animalListSize}){
-					nfgRate=nfgRate.concat(",");}
-		}
 		var animalData = ${animalRawData};
 		var listAnimalName = "${animalNameList}";
 		var listAnimalName = listAnimalName.replace("[", ""); 
 		var listAnimalName = listAnimalName.replace("]", ""); 
 		var arrayAnimalName;
 		arrayAnimalName = listAnimalName.split(",");
-		var listAnimal = ('${animalList}');
-		listAnimal = listAnimal
-				.substr(0, listAnimal.length - 1);
-		var arrayAnimal;
-		arrayAnimal = listAnimal.split(",");
 		
 		var countryName = "${countryName}";
 		var resultArray = [];
@@ -127,7 +114,7 @@ function regerateData() {
 								}
 							}
 						}
-						resultArray.push(nutritionProtein * 0.319);
+						resultArray.push(nutritionProtein * 35600);
 					}
 				}
 				}
@@ -178,6 +165,9 @@ function regerateData() {
 					text: ''
 				}
 			},
+			credits : {
+				enabled : false
+			},
 			tooltip: {
 				headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
 				pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
@@ -204,7 +194,7 @@ function regerateData() {
 		var nfgRate = "";
 		for(index=1;index< ${animalListSize+1} ; index++){
 					var AnimalId=index.toString()+"animal";
-					var parameter = index.toString()+"-";
+					var parameter = index.toString()+"a-";
 					nfgRate=nfgRate.concat(parameter);
 					nfgRate= nfgRate.concat(document.getElementById(AnimalId).value);
 					if(index!=${animalListSize}){
@@ -213,7 +203,7 @@ function regerateData() {
 		}
 
 		window.location.href = getContextPath()
-				+ "/finalReport.html?country=${countryId}&property=${propertyName}&unitIndex=${unitIndex}&nfgRate="+nfgRate; 
+				+ "/finalReport.html?country=${country}&property=${propertyName}&unitIndex=${unitIndex}&nfgRate="+nfgRate; 
 	}
 	
 	function getContextPath() {
@@ -230,14 +220,7 @@ function regerateData() {
 		var listAnimalName = listAnimalName.replace("]", ""); 
 		var arrayAnimalName;
 		arrayAnimalName = listAnimalName.split(",");
-		console.log(arrayAnimalName);
 
-		var listAnimal = ('${animalList}');
-		listAnimal = listAnimal
-				.substr(0, listAnimal.length - 1);
-		var arrayAnimal;
-		arrayAnimal = listAnimal.split(",");
-		
 		var countryName = "${countryName}";
 		var resultArray = [];
 		var arrYears = ${yearList};
@@ -285,7 +268,7 @@ function regerateData() {
 							}
 						}
 					}
-					resultArray.push(nutritionProtein * 0.319);
+					resultArray.push(nutritionProtein * 35600);
 				}
 			}
 
@@ -318,6 +301,9 @@ function regerateData() {
 				categories: arrayAnimalName,
 				crosshair: true
 			},
+			credits : {
+				enabled : false
+			},
 			yAxis: {
 				min: 0,
 				title: {
@@ -346,13 +332,55 @@ function regerateData() {
 $(document).ready(function(){
 						
 						generateScenario();
-						/*
-						Country Array
-						 */
-						
+						showTable();
 					});
 
-	
+function showTable(){
+		var animalData = ${animalRawData};
+		var aquacultureData = ${aquacultureData};
+		var arrYears = ${yearList};
+		var latestYear = arrYears[arrYears.length - 1];
+		var countryName = "${countryName}";
+		var listAnimalName = "${animalNameList}";
+		var listAnimalName = listAnimalName.replace("[", ""); 
+		var listAnimalName = listAnimalName.replace("]", ""); 
+		var arrayAnimalName;
+		arrayAnimalName = listAnimalName.split(",");
+		console.log(arrayAnimalName);
+		
+		$('#table')
+			.append(
+							' <tr><th style="text-align: center;" colspan="5">'+latestYear+'</th></tr>'
+							+'<tr>' 
+							+ '<th style="text-align: center;">Animal</th>' 
+							+ '<th style="text-align: center;">Number</th>'
+							+ '<th style="text-align: center;">Non-forage rate</th>'
+							+ '<th style="text-align: center;">Energy</th>'
+							+ '<th style="text-align: center;">Protein</th>'
+							+ '</tr>');
+		
+		for ( var increment in animalData) {
+			if (countryName == animalData[increment].countryName) {
+				for ( var animalIndex = 0; animalIndex < arrayAnimalName.length; animalIndex++) {
+					var animalName=arrayAnimalName[animalIndex].trim();
+					if (animalName == animalData[increment].animalName) {
+						if (latestYear == animalData[increment].year) {
+							$('#table')
+							.append(
+								'<tr>' + '<td style="text-align: center;">' + animalData[increment].animalName + '</td>'  
+									+ '<td style="text-align: center;">' + animalData[increment].animalCount + '</td>' 
+									+ '<td style="text-align: center;">'
+									+ '<input type="text" id="'+(animalIndex+1)+'animal" name="'+(animalIndex+1)+'animal" size="8"'
+									+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
+									+ ' value="'+animalData[increment].nonForageRate+'"> </td>' + '<td style="text-align: center;">'
+									+ animalData[increment].energyUnitIndex + '</td>' + '<td style="text-align: center;">'
+									+ animalData[increment].proteinUnitIndex + '</td>' + '</tr>');		
+						}
+					}
+				}
+			}
+		}
+}					
 	
 </script>
 
@@ -378,63 +406,55 @@ $(document).ready(function(){
 				<li><a class="active">Online Feed Simulator</a></li>
 			</ol>
 
-			<div class="container" id="page" style="padding-top: 60px">
-				<h4>
-					<b><div class="row"
-							style="margin-left: 20px; margin-right: 20px; margin-top: 30px; margin-bottom: 50px; background-color: #ADD5F7;">
-							<div class="col-md-4" align="left">
-								<button type="button" class="btn btn-default">Country/Region
-									: ${countryName}</button>
-							</div>
-							<div class="col-md-4" align="center">
-								<button type="button" class="btn btn-default">Property
-									Name : ${propertyName}</button>
-							</div>
-							<div class="col-md-4" align="right">
-								<button type="button" class="btn btn-default">Unit
-									Index : ${unitIndex}</button>
-							</div>
-						</div></b>
-				</h4>
+			<div class="container" id="page" style="padding-top: 20px">
 
-				<div class="row" style="margin-top: 30px">
-					<div class="col-md-1">
-						<button type="button" class="btn btn-default"
-							onClick="showResult();">Show Results</button>
-					</div>
+                <div class="row">
+                    <div class="col-md-4" align="left">
+                    <button type="button" class="btn btn-default">Country/Region
+                    : ${countryName}</button>
+                    </div>
+                    <div class="col-md-4" align="center">
+                    <button type="button" class="btn btn-default">Property
+                    Name : ${propertyName}</button>
+                    </div>
+                    <div class="col-md-4" align="right">
+                    <button type="button" class="btn btn-default">Unit
+                    Index : ${unitIndex}</button>
+                    </div>
+                </div>
 
-					<div class="col-md-1" style="margin-left: 20px">
-						<button type="button" class="btn btn-default"
-							onClick="regerateData();">Regenerate Graph</button>
+
+				<div class="row" style="padding-top: 20px">
+					<div class="col-md-9" id="tableDiv">
+						<table class="bordered" id='table' align="left" border="1">
+						</table>
 					</div>
-					<div class="col-md-6"></div>
+                    <div class=col-md-3>
+                        <div class="row">
+                            <button type="button" class="btn btn-default"
+                            onClick="showResult();">Show Results</button>
+                        </div>
+
+                        <div class="row" style="margin-top: 20px">
+                            <button type="button" class="btn btn-default"
+                            onClick="regerateData();">Regenerate Graph</button>
+                        </div>
+                    </div>
 				</div>
-			</div>
-			<div>
 
-				<table id="nonForageRate" align="left" border="1">
+                <div class="row">
+                    <div class="col-md-12">
+                    <div id="barGraph"
+                    style="min-width: 310px; height: 400px; margin: 0 auto"></div>
+                    </div>
+                </div>
 
-					<c:choose>
-						<c:when test="${not empty animalList}">
-							<c:forEach items="${animalList}" var="anList"
-								varStatus="varStatus">
-								<tr>
-									<td>${anList.animalName}</td>
-									<td><input type="text" id="${anList.animalId}animal"
-										name="${anList.animalId}animal" size="8" maxlength="20"></td>
-								</tr>
-							</c:forEach>
-						</c:when>
-					</c:choose>
-				</table>
-			</div>
-		</div>
-		<div>
-			<div id="barGraph"
-				style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-		</div>
-		<div>
-			<div name="scenarioRegenerateData" id="scenarioRegenerateData"></div>
+                <div class="row" style="margin-top: 30px">
+                    <div class="col-md-4">
+                        <div name="scenarioRegenerateData" id="scenarioRegenerateData"></div>
+                    </div>
+                </div>
+    		</div>
 		</div>
 	</div>
 </body>

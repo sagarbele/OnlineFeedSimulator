@@ -51,8 +51,7 @@ public class ScenarioAnalysis {
 			@RequestParam(value = "unitIndex", required = false) String unitIndex,
 			@RequestParam(value = "property", required = false) String propertyName,
 			Model model) {
-		
-		System.out.println("======"+countryId + "-"+propertyName+"-"+unitIndex);
+
 		/*
 		 * Get Property Value
 		 */
@@ -79,7 +78,6 @@ public class ScenarioAnalysis {
 		 * Get Animal Data for selected countries
 		 */
 		List<AnimalData> animalData = animalService.getAnimalData(countryId);
-		model.addAttribute("countryId", countryId);
 		/*
 		 * Get list of countries
 		 */
@@ -88,7 +86,6 @@ public class ScenarioAnalysis {
 		for(CountryDetail cData :countryList){
 			model.addAttribute("countryName", cData.getCountryName());
 		}
-		
 		
 		/*
 		 * Get Year List
