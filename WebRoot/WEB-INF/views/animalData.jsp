@@ -8,7 +8,7 @@
 <script type="text/javascript">
 	function makeTable() {
 
-			var animalData = ${animalRawData};
+		var animalData = ${animalRawData};
 		var aquacultureData = ${aquacultureData};
 		var arrYears = ${yearList};
 		var resultArray = [];
@@ -38,9 +38,9 @@
 											+ (animalData[increment].animalCount
 													* animalData[increment].nonForageRate * energyIndex);
 								}
-								
+
 							} else {
-								
+
 								var proteinIndex = animalData[increment].proteinUnitIndex;
 								if (proteinIndex != null
 										&& proteinIndex !== undefined) {
@@ -48,24 +48,19 @@
 											+ (animalData[increment].animalCount
 													* animalData[increment].nonForageRate * proteinIndex);
 								}
-								
-								
+
 							}
-						
+
 						}
 					}
-					
-					
-					
+
 				}
 				if (unitIndx == "Energy") {
-					nutrition = nutrition * 0.319; 
-					}
-					else
-					{
-					nutrition = nutrition * 35600; 
-					
-					}
+					nutrition = nutrition * 0.319;
+				} else {
+					nutrition = nutrition * 35600;
+
+				}
 				//aqua
 				for ( var aqua_increment in aquacultureData) {
 					if (countryName == aquacultureData[aqua_increment].countryName) {
@@ -83,18 +78,18 @@
 										&& proteinIndex !== undefined) {
 									nutrition = nutrition
 											+ (aquacultureData[aqua_increment].nutritionProtein * 1);
-											
+
 								}
 
 							}
 						}
 					}
 				}
-				
+
 				if (yearIndex == arrYears.length - 1) {
-				/*	console.log(countryIndex + countryName + yearIndex + "-"
-							+ yearNo + "-" + nutrition * 0.319 + "--"
-							+ arrYears.length); */
+					/* console.log(countryIndex + countryName + yearIndex + "-"
+					+ yearNo + "-" + nutrition * 0.319 + "--"
+					+ arrYears.length); */
 					$('#table' + (countryIndex + 1))
 							.prepend(
 									'<tr>'
@@ -105,15 +100,15 @@
 											+ '" style="color: lightseagreen">'
 											+ countryName + '</a>' + '</th>'
 											+ '<th>' + yearNo + '</th>'
-											+ '<th>' + (nutrition)
-											+ '</th>' + '</tr>');
+											+ '<th>' + (nutrition) + '</th>'
+											+ '</tr>');
 				} else {
 					/*console.log(countryIndex + countryName + yearIndex + "-"
-							+ yearNo + "-" + nutrition * 0.319); */
+					+ yearNo + "-" + nutrition * 0.319); */
 					$('#tableData' + (countryIndex + 1)).prepend(
 							'<tr>' + '<td>' + countryName + '</td>' + '<td>'
-									+ yearNo + '</td>' + '<td>'
-									+ (nutrition) + '</td>' + '</tr>');
+									+ yearNo + '</td>' + '<td>' + (nutrition)
+									+ '</td>' + '</tr>');
 				}
 			}
 
@@ -165,24 +160,33 @@
 						}
 					}
 				}
-				resultArray.push(nutritionProtein * 35600 + aquaNutritionProtein*1);  // Multiply by 10k to show it in graph
+				resultArray.push(nutritionProtein * 35600
+						+ aquaNutritionProtein * 1); // Multiply by 10k to show it in graph
 			}
 
 		}
 
+		var tempArray = [];
+		tempArray = resultArray;
 		var myarray = [];
-		var arrayLen = resultArray.length;
-		for ( var i = 0; i < arrayLen; i = i + 5) {
-
+		var tempLen = tempArray.length;
+		var arrayLen = tempArray.length;
+		var yearsLength = arrYears.length;
+		for (; arrayLen > 0;) {
+			var checkArray = [];
+			var checkSlicedData = [];
+			var countryName = tempArray.slice(0, 1);
+			checkArray = tempArray.slice(1, yearsLength + 1);
 			var item = {
-				"name" : resultArray[i],
-				"data" : [ resultArray[i + 1], resultArray[i + 2],
-						resultArray[i + 3], resultArray[i + 4] ]
-
+				"name" : countryName,
+				"data" : checkArray
 			};
-
+			checkSlicedData = tempArray.slice(yearsLength + 1, tempLen);
+			tempArray = checkSlicedData;
+			arrayLen = tempArray.length;
 			myarray.push(item);
 		}
+
 		return myarray;
 
 	}
@@ -192,7 +196,6 @@
 		var animalData = ${animalRawData};
 		var aquacultureData = ${aquacultureData};
 		var arrYears = ${yearList};
-
 		var resultArray = [];
 		var listCountry = ('${countryList}');
 		listCountry = listCountry.substr(0, listCountry.length - 1);
@@ -237,22 +240,30 @@
 						}
 					}
 				}
-				resultArray.push(nutritionEnergy * 0.319+ aquaNutritionEnergy*1);
+				resultArray.push(nutritionEnergy * 0.319 + aquaNutritionEnergy
+						* 1);
 			}
 
 		}
 
+		var tempArray = [];
+		tempArray = resultArray;
 		var myarray = [];
-		var arrayLen = resultArray.length;
-		for ( var i = 0; i < arrayLen; i = i + 5) {
-
+		var tempLen = tempArray.length;
+		var arrayLen = tempArray.length;
+		var yearsLength = arrYears.length;
+		for (; arrayLen > 0;) {
+			var checkArray = [];
+			var checkSlicedData = [];
+			var countryName = tempArray.slice(0, 1);
+			checkArray = tempArray.slice(1, yearsLength + 1);
 			var item = {
-				"name" : resultArray[i],
-				"data" : [ resultArray[i + 1], resultArray[i + 2],
-						resultArray[i + 3], resultArray[i + 4] ]
-
+				"name" : countryName,
+				"data" : checkArray
 			};
-
+			checkSlicedData = tempArray.slice(yearsLength + 1, tempLen);
+			tempArray = checkSlicedData;
+			arrayLen = tempArray.length;
 			myarray.push(item);
 		}
 
@@ -309,6 +320,7 @@
 						 */
 						var animalData = ${animalRawData};
 						var aquacultureData = ${aquacultureData};
+
 						var listCountry = ('${countryList}');
 						listCountry = listCountry.substr(0,
 								listCountry.length - 1);
@@ -331,56 +343,56 @@
 							var nutritionProtein = 0;
 							var aquaEnergyIndex = 0;
 							var aquaProteinIndex = 0;
-							
+
 							var latestYear = arrYears[arrYears.length - 1];
 							if (unitIndx == "Energy") {
 								for ( var animalIndex = 0; animalIndex < arrayAnimal.length; animalIndex++) {
 									resultArray.push(arrayAnimal[animalIndex]);
 									for ( var increment in animalData) {
 										if (countryName == animalData[increment].countryName) {
-											if (arrayAnimal[animalIndex] == animalData[increment].animalName) {	
-											if (latestYear == animalData[increment].year) {
-												var energyIndex = animalData[increment].energyUnitIndex;
-												if (energyIndex != null
-														&& energyIndex !== undefined) {
-													nutritionEnergy = nutritionEnergy
-															+ (animalData[increment].animalCount
-																	* animalData[increment].nonForageRate * energyIndex);
+											if (arrayAnimal[animalIndex] == animalData[increment].animalName) {
+												if (latestYear == animalData[increment].year) {
+													var energyIndex = animalData[increment].energyUnitIndex;
+													if (energyIndex != null
+															&& energyIndex !== undefined) {
+														nutritionEnergy = nutritionEnergy
+																+ (animalData[increment].animalCount
+																		* animalData[increment].nonForageRate * energyIndex);
+													}
 												}
-											}
 											}
 										}
 									}
 									resultArray.push(nutritionEnergy * 0.319);
-									
+
 								}
 								for ( var aqua_increment in aquacultureData) {
 									if (countryName == aquacultureData[aqua_increment].countryName) {
 										if (latestYear == aquacultureData[aqua_increment].year) {
 											resultArray.push("Aqua");
 											aquaEnergyIndex = aquacultureData[aqua_increment].nutritionEnergy;
-											resultArray.push(aquaEnergyIndex * 1);
+											resultArray
+													.push(aquaEnergyIndex * 1);
 										}
 									}
-									
+
 								}
-								
-								
+
 							} else {
 								for ( var animalIndex = 0; animalIndex < arrayAnimal.length; animalIndex++) {
 									resultArray.push(arrayAnimal[animalIndex]);
 									for ( var increment in animalData) {
 										if (countryName == animalData[increment].countryName) {
-											if (arrayAnimal[animalIndex] == animalData[increment].animalName) {	
-											if (latestYear == animalData[increment].year) {
-												var proteinIndex = animalData[increment].proteinUnitIndex;
-												if (proteinIndex != null
-														&& proteinIndex !== undefined) {
-													nutritionProtein = nutritionProtein
-															+ (animalData[increment].animalCount
-																	* animalData[increment].nonForageRate * proteinIndex);
+											if (arrayAnimal[animalIndex] == animalData[increment].animalName) {
+												if (latestYear == animalData[increment].year) {
+													var proteinIndex = animalData[increment].proteinUnitIndex;
+													if (proteinIndex != null
+															&& proteinIndex !== undefined) {
+														nutritionProtein = nutritionProtein
+																+ (animalData[increment].animalCount
+																		* animalData[increment].nonForageRate * proteinIndex);
+													}
 												}
-											}
 											}
 										}
 									}
@@ -391,21 +403,22 @@
 										if (latestYear == aquacultureData[aqua_increment].year) {
 											resultArray.push("Aqua");
 											aquaProteinIndex = aquacultureData[aqua_increment].nutritionProtein;
-											resultArray.push(aquaProteinIndex * 1);
+											resultArray
+													.push(aquaProteinIndex * 1);
 										}
 									}
-									
+
 								}
-								
+
 							}
 							//alert(resultArray);
-							// console.log(resultArray);
+							//console.log(resultArray);
 
 							var myarray = [];
 							//alert(resultArray.length);
 							var item = {
 								"type" : 'pie',
-								"name" : countryName ,
+								"name" : countryName,
 								"data" : [ [ resultArray[1], resultArray[2] ],
 										[ resultArray[3], resultArray[4] ],
 										[ resultArray[5], resultArray[6] ],
@@ -414,7 +427,7 @@
 										[ resultArray[11], resultArray[12] ],
 										[ resultArray[13], resultArray[14] ],
 										[ resultArray[15], resultArray[16] ],
-										[ resultArray[17], resultArray[18] ]]
+										[ resultArray[17], resultArray[18] ] ]
 							};
 							myarray.push(item);
 
@@ -436,7 +449,7 @@
 
 												},
 												tooltip : {
-													pointFormat : '{series.name}:  {point.percentage:.1f} % :<b>{point.y}</b>'
+													pointFormat : '{series.name}: {point.percentage:.1f} % :<b>{point.y}</b>'
 												},
 												plotOptions : {
 													pie : {
@@ -457,7 +470,6 @@
 						//Generate Table
 						makeTable();
 					});
-
 </script>
 
 <div class="row" style="padding-top: 40px">

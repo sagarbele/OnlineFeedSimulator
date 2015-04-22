@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,9 +26,9 @@ public class CountryDaoImpl implements CountryDao {
 	@SuppressWarnings("unchecked")
 	public List<CountryDetail> getCountryData() {
 		return (List<CountryDetail>) sessionFactory.getCurrentSession()
-				.createCriteria(CountryDetail.class).list();
+				.createCriteria(CountryDetail.class).addOrder( Order.asc("countryName")).list();
 	}
-
+	
 	@SuppressWarnings("unchecked")
 	public List<CountryDetail> getCountryData(int countryId) {
 		return (List<CountryDetail>) sessionFactory.getCurrentSession()
