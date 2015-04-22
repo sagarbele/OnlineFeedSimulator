@@ -6,6 +6,21 @@
 <link rel="shortcut icon" href="assets/ico/favicon.png">
 <!-- Bootstrap core CSS -->
 <script type="text/javascript">
+
+		function formatNumber (num) {
+		var myNumberAsString = num;           
+		var myNumber = Math.round(0.0 + myNumberAsString); 
+		parseInt(myNumber);
+		return myNumber.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); 
+		}
+		
+		function formatNumberRoundOff (num) {
+		var myNumberAsString = num;           
+		var myNumber = Math.round(0.0 + myNumberAsString); 
+		return parseInt(myNumber); 
+		}
+		
+		
 	function makeTable() {
 
 		var animalData = ${animalRawData};
@@ -71,6 +86,7 @@
 										&& energyIndex !== undefined) {
 									nutrition = nutrition
 											+ (aquacultureData[aqua_increment].nutritionEnergy * 1);
+										nutrition= formatNumber(nutrition);	
 								}
 							} else {
 								var proteinIndex = aquacultureData[aqua_increment].nutritionProtein;
@@ -78,7 +94,7 @@
 										&& proteinIndex !== undefined) {
 									nutrition = nutrition
 											+ (aquacultureData[aqua_increment].nutritionProtein * 1);
-
+									nutrition= formatNumber(nutrition);
 								}
 
 							}
@@ -160,8 +176,10 @@
 						}
 					}
 				}
-				resultArray.push(nutritionProtein * 35600
-						+ aquaNutritionProtein * 1); // Multiply by 10k to show it in graph
+				var v =nutritionProtein * 35600 + aquaNutritionProtein * 1; 
+				v = formatNumberRoundOff(v);
+				resultArray.push(v);
+				
 			}
 
 		}
@@ -240,8 +258,9 @@
 						}
 					}
 				}
-				resultArray.push(nutritionEnergy * 0.319 + aquaNutritionEnergy
-						* 1);
+				var v = nutritionEnergy * 0.319 + aquaNutritionEnergy * 1;
+				v = formatNumberRoundOff(v);
+				resultArray.push(v);
 			}
 
 		}
@@ -315,9 +334,6 @@
 							series : jsonData
 						});
 
-						/*
-						Country Array
-						 */
 						var animalData = ${animalRawData};
 						var aquacultureData = ${aquacultureData};
 
@@ -332,9 +348,7 @@
 								.substr(0, listAnimal.length - 1);
 						var arrayAnimal;
 						arrayAnimal = listAnimal.split(",");
-						// alert(arrayAnimal + "-"+arrCountry);
 
-						// var resultArray= [];
 						for ( var countryIndex = 0; countryIndex < arrCountry.length; countryIndex++) {
 							var countryName = arrCountry[countryIndex];
 							var resultArray = [];
@@ -363,7 +377,8 @@
 											}
 										}
 									}
-									resultArray.push(nutritionEnergy * 0.319);
+									
+									resultArray.push(formatNumberRoundOff(nutritionEnergy * 0.319));
 
 								}
 								for ( var aqua_increment in aquacultureData) {
@@ -371,8 +386,8 @@
 										if (latestYear == aquacultureData[aqua_increment].year) {
 											resultArray.push("Aqua");
 											aquaEnergyIndex = aquacultureData[aqua_increment].nutritionEnergy;
-											resultArray
-													.push(aquaEnergyIndex * 1);
+											
+											resultArray.push(formatNumberRoundOff(aquaEnergyIndex * 1));
 										}
 									}
 
@@ -396,15 +411,14 @@
 											}
 										}
 									}
-									resultArray.push(nutritionProtein * 35600);
+									resultArray.push(formatNumberRoundOff(nutritionProtein * 35600));
 								}
 								for ( var aqua_increment in aquacultureData) {
 									if (countryName == aquacultureData[aqua_increment].countryName) {
 										if (latestYear == aquacultureData[aqua_increment].year) {
 											resultArray.push("Aqua");
 											aquaProteinIndex = aquacultureData[aqua_increment].nutritionProtein;
-											resultArray
-													.push(aquaProteinIndex * 1);
+											resultArray.push(formatNumberRoundOff(aquaProteinIndex * 1));
 										}
 									}
 
@@ -445,7 +459,7 @@
 													plotShadow : false
 												},
 												title : {
-													text : countryName,
+													text :  "",
 
 												},
 												tooltip : {
@@ -474,6 +488,14 @@
 
 <div class="row" style="padding-top: 40px">
 	<div class="col-md-12" id="lineChartDiv"></div>
+</div>
+<div >
+	</br>
+	</br>
+</div>
+
+<div >
+	<P ALIGN="CENTER">Share of different animal types/species of total estimated feed demand</P>
 </div>
 <div class="row" style="padding-top: 20px">
 	<div class="col-md-4" style="display: inline-block;" id="pieChartDiv1"></div>

@@ -46,7 +46,14 @@ function regerateData() {
 		var countryName = "${countryName}";
 		var resultArray = [];
 		var arrYears = ${yearList};
-		var latestYear = arrYears[arrYears.length - 1];
+		
+		var yearSelected = $("#selectYear option:selected").val();
+		if(yearSelected==""){
+			var latestYear = arrYears[arrYears.length - 1];
+		}	
+		else{
+			latestYear=yearSelected;
+		}
 		var myarray = [];
 		for ( var dataType = 0; dataType < 2; dataType++) {
 			resultArray.push(latestYear);
@@ -189,7 +196,7 @@ function regerateData() {
 			series: myarray
 		});
 	
-	
+		
 		for ( var increment in animalData) {
 			if (countryName == animalData[increment].countryName) {
 				for ( var animalIndex = 0; animalIndex < arrayAnimalName.length; animalIndex++) {
@@ -256,7 +263,7 @@ function regerateData() {
 		return cp;
 	}
 	
-	function generateScenario() {
+	function generateScenario(latestYear) {
 		var animalData = ${animalRawData};
 		var listAnimalName = "${animalNameList}";
 		var listAnimalName = listAnimalName.replace("[", ""); 
@@ -266,8 +273,7 @@ function regerateData() {
 
 		var countryName = "${countryName}";
 		var resultArray = [];
-		var arrYears = ${yearList};
-		var latestYear = arrYears[arrYears.length - 1];
+
 		resultArray.push(latestYear);
 		var unitIndx = "${unitIndex}";
 
@@ -376,16 +382,17 @@ function regerateData() {
 	
 	
 $(document).ready(function(){
+						var arrYears = ${yearList};
+						var latestYear = arrYears[arrYears.length - 1];
 						
-						generateScenario();
-						showTable();
+						generateScenario(latestYear);
+						showTable(latestYear);
 					});
 
-function showTable(){
+function showTable(latestYear){
 		var animalData = ${animalRawData};
 		var aquacultureData = ${aquacultureData};
-		var arrYears = ${yearList};
-		var latestYear = arrYears[arrYears.length - 1];
+		
 		var countryName = "${countryName}";
 		var listAnimalName = "${animalNameList}";
 		var listAnimalName = listAnimalName.replace("[", ""); 
@@ -398,7 +405,7 @@ function showTable(){
 		
 		$('#tableAnimal')
 			.append(
-							' <tr><th style="text-align: center;" colspan="6">'+latestYear+'</th></tr>'
+							'<tr><th style="text-align: center;" colspan="6">'+latestYear+'</th></tr>' 
 							+'<tr>' 
 							+ '<th style="text-align: center;">Species</th>' 
 							+ '<th style="text-align: center;">Animal number</th>'
@@ -501,7 +508,16 @@ function showTable(){
 			}
 		}
 		
-}					
+}	
+
+function resetValue() {
+
+	var yearSelected = $("#selectYear option:selected").val();
+	$('#tableAqua').empty();
+	$('#tableAnimal').empty();
+	generateScenario(yearSelected);
+	showTable(yearSelected);
+}				
 	
 </script>
 
@@ -530,17 +546,35 @@ function showTable(){
 			<div class="container" id="page" style="padding-top: 20px">
 
                 <div class="row">
-                    <div class="col-md-4" align="left">
+                    <div class="col-md-3" align="left">
                     <button type="button" class="btn btn-default">Country/Region
                     : ${countryName}</button>
                     </div>
-                    <div class="col-md-4" align="center">
+                    <div class="col-md-3" align="center">
                     <button type="button" class="btn btn-default">Base Commodity : ${propertyName}</button>
                     </div>
-                    <div class="col-md-4" align="right">
+                    <div class="col-md-3" align="right">
                     <button type="button" class="btn btn-default">Animal Unit
                     Index : ${unitIndex}</button>
                     </div>
+					<div class="col-md-3" id="formTabTwo">
+						<div class="form-group" id="eeFormGroup">
+							<label for="selectYear">Select Year</label> <br /> <select class="selectBox"
+								id="selectYear" title='Choose one or more..'>
+								<option selected="selected" value="">Select one</option>
+								<c:choose>
+									<c:when test="${not empty yearList}">
+										<c:forEach items="${yearList}" var="year"
+											varStatus="varStatus">
+
+											<option name="yearValue" value="${year}">
+												${year}</option>
+										</c:forEach>
+									</c:when>
+								</c:choose>
+							</select>
+						</div>
+					</div>
                 </div>
 
 
@@ -561,6 +595,10 @@ function showTable(){
                         <div class="row" style="margin-top: 20px">
                             <button type="button" class="btn btn-default"
                             onClick="regerateData();">Regenerate Graph</button>
+                        </div>
+						<div class="row" style="margin-top: 20px">
+                            <button type="button" class="btn btn-default"
+                            onClick="resetValue();">Reset Values</button>
                         </div>
                     </div>
 				</div>
