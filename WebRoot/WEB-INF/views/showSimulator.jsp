@@ -46,8 +46,8 @@ function regerateData() {
 		var countryName = "${countryName}";
 		var resultArray = [];
 		var arrYears = ${yearList};
-		
 		var yearSelected = $("#selectYear option:selected").val();
+		alert(yearSelected);
 		if(yearSelected==""){
 			var latestYear = arrYears[arrYears.length - 1];
 		}	
@@ -65,29 +65,32 @@ function regerateData() {
 						for ( var increment in animalData) {
 							if (countryName == animalData[increment].countryName) {
 								if (animalName == animalData[increment].animalName) {
-								if (latestYear == animalData[increment].year) {
-									var energyIndex = animalData[increment].energyUnitIndex;
-									if(dataType==0){
-										var energyIndex = animalData[increment].energyUnitIndex;
-										if (energyIndex != null
-												&& energyIndex !== undefined) {
-											nutritionEnergy = nutritionEnergy
-													+ (animalData[increment].animalCount
-															* animalData[increment].nonForageRate * energyIndex);
+									
+										if (latestYear == animalData[increment].year) {
+											var energyIndex = animalData[increment].energyUnitIndex;
+											if(dataType==0){
+												var energyIndex = animalData[increment].energyUnitIndex;
+												if (energyIndex != null
+														&& energyIndex !== undefined) {
+													nutritionEnergy = nutritionEnergy
+															+ (animalData[increment].animalCount
+																	* animalData[increment].nonForageRate * energyIndex);
+												}
+											}
+											else{
+												var AnimalIdNfg=(animalIndex+1).toString()+"animalNfg";
+												var AnimalIdCount=(animalIndex+1).toString()+"animalCount";
+												var AnimalIdEnergy=(animalIndex+1).toString()+"animalEnergy";
+												
+												
+													nutritionEnergy = nutritionEnergy
+															+ (document.getElementById(AnimalIdCount).value
+																	* document.getElementById(AnimalIdNfg).value * document.getElementById(AnimalIdEnergy).value);
+												
+											}
 										}
-									}
-									else{
-										var AnimalIdNfg=(animalIndex+1).toString()+"animalNfg";
-										var AnimalIdCount=(animalIndex+1).toString()+"animalCount";
-										var AnimalIdEnergy=(animalIndex+1).toString()+"animalEnergy";
-										
-										
-											nutritionEnergy = nutritionEnergy
-													+ (document.getElementById(AnimalIdCount).value
-															* document.getElementById(AnimalIdNfg).value * document.getElementById(AnimalIdEnergy).value);
-										
-									}
-								}
+									
+									
 								}
 							}
 						}
@@ -100,29 +103,32 @@ function regerateData() {
 						for ( var increment in animalData) {
 							if (countryName == animalData[increment].countryName) {
 								if (animalName == animalData[increment].animalName) {
-								if (latestYear == animalData[increment].year) {
-									if(dataType==0){
-										var proteinIndex = animalData[increment].proteinUnitIndex;
-										if (proteinIndex != null
-												&& proteinIndex !== undefined) {
-											nutritionProtein = nutritionProtein
-													+ (animalData[increment].animalCount
-															* animalData[increment].nonForageRate * proteinIndex);
-											}
-										}
-									else{
-										var AnimalIdNfg=(animalIndex+1).toString()+"animalNfg";
-										var AnimalIdCount=(animalIndex+1).toString()+"animalCount";
-										var AnimalIdProtein=(animalIndex+1).toString()+"animalProtein";
-										
-										console.log(AnimalIdNfg);
-										
-											nutritionProtein = nutritionProtein
-													+ (document.getElementById(AnimalIdCount).value
-															* document.getElementById(AnimalIdNfg).value * document.getElementById(AnimalIdProtein).value);
+									
+										if (latestYear == animalData[increment].year) {
+											if(dataType==0){
+												var proteinIndex = animalData[increment].proteinUnitIndex;
+												if (proteinIndex != null
+														&& proteinIndex !== undefined) {
+													nutritionProtein = nutritionProtein
+															+ (animalData[increment].animalCount
+																	* animalData[increment].nonForageRate * proteinIndex);
+													}
+												}
+											else{
+												var AnimalIdNfg=(animalIndex+1).toString()+"animalNfg";
+												var AnimalIdCount=(animalIndex+1).toString()+"animalCount";
+												var AnimalIdProtein=(animalIndex+1).toString()+"animalProtein";
 												
-										}
-									}
+												console.log(AnimalIdNfg);
+												
+													nutritionProtein = nutritionProtein
+															+ (document.getElementById(AnimalIdCount).value
+																	* document.getElementById(AnimalIdNfg).value * document.getElementById(AnimalIdProtein).value);
+														
+												}
+											}
+									
+											
 								}
 							}
 							resultArray.push(nutritionProtein * 35600);
@@ -211,26 +217,48 @@ function regerateData() {
 						var NfgValue = document.getElementById(AnimalIdNfg).value;
 						var CountValue = document.getElementById(AnimalIdCount).value;
 						var EnergyValue = document.getElementById(AnimalIdEnergy).value;
+						if(latestYear!="All Years"){
+							if (latestYear == animalData[increment].year) {
+									var nutritionEnergy = 0;
+									var nutritionProtein = 0;
+								if(unitIndx=="Energy"){
 
-						if (latestYear == animalData[increment].year) {
-								var nutritionEnergy = 0;
-								var nutritionProtein = 0;
-							if(unitIndx=="Energy"){
+									nutritionEnergy = nutritionEnergy
+												+ (NfgValue * CountValue * EnergyValue * 0.319);
+									nutritionEnergy = (nutritionEnergy+"").split(".")[0];				
+									document.getElementById(FeedDemand).value=nutritionEnergy;
+										
+								}
+								else{
 
-								nutritionEnergy = nutritionEnergy
-											+ (NfgValue * CountValue * EnergyValue * 0.319);
-								nutritionEnergy = (nutritionEnergy+"").split(".")[0];				
-								document.getElementById(FeedDemand).value=nutritionEnergy;
-									
-							}
-							else{
-
-							nutritionProtein = nutritionProtein
-											+ (NfgValue * CountValue * ProteinValue * 35600 );
-								nutritionProtein = (nutritionProtein+"").split(".")[0];					
-								document.getElementById(FeedDemand).value=nutritionProtein;
+								nutritionProtein = nutritionProtein
+												+ (NfgValue * CountValue * ProteinValue * 35600 );
+									nutritionProtein = (nutritionProtein+"").split(".")[0];					
+									document.getElementById(FeedDemand).value=nutritionProtein;
+								}
 							}
 						}
+						else{
+							
+									var nutritionEnergy = 0;
+									var nutritionProtein = 0;
+								if(unitIndx=="Energy"){
+
+									nutritionEnergy = nutritionEnergy
+												+ (NfgValue * CountValue * EnergyValue * 0.319);
+									nutritionEnergy = (nutritionEnergy+"").split(".")[0];				
+									document.getElementById(FeedDemand).value=nutritionEnergy;
+										
+								}
+								else{
+
+								nutritionProtein = nutritionProtein
+												+ (NfgValue * CountValue * ProteinValue * 35600 );
+									nutritionProtein = (nutritionProtein+"").split(".")[0];					
+									document.getElementById(FeedDemand).value=nutritionProtein;
+								}
+							
+						}	
 					}
 				}
 			}
@@ -420,93 +448,128 @@ function showTable(latestYear){
 				for ( var animalIndex = 0; animalIndex < arrayAnimalName.length; animalIndex++) {
 					var animalName=arrayAnimalName[animalIndex].trim();
 					if (animalName == animalData[increment].animalName) {
-						if (latestYear == animalData[increment].year) {
-								var nutritionEnergy = 0;
-								var nutritionProtein = 0;
-							if(unitIndx=="Energy"){
-								nutritionEnergy = nutritionEnergy
-											+ (animalData[increment].animalCount
-													* animalData[increment].nonForageRate * animalData[increment].energyUnitIndex * 0.319);
-								nutritionEnergy = (nutritionEnergy+"").split(".")[0];
-								console.log(nutritionEnergy);
-								$('#tableAnimal')
-								.append(
-									'<tr>' + '<td style="text-align: center;">' + animalData[increment].animalName + '</td>'  
-										+ '<td style="text-align: center;">'
-										+ '<input type="text" id="'+(animalIndex+1)+'animalCount" name="'+(animalIndex+1)+'animalCount" size="8"'
-										+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
-										+ ' value="'+animalData[increment].animalCount+'"> </td>'
-										+ '<td style="text-align: center;">'
-										+ '<input type="text" id="'+(animalIndex+1)+'animalNfg" name="'+(animalIndex+1)+'animalNfg" size="6"'
-										+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
-										+ ' value="'+animalData[increment].nonForageRate+'"> </td>' 
-										+'<td style="text-align: center;">'
-										+ '<input type="text" id="'+(animalIndex+1)+'animalEnergy" name="'+(animalIndex+1)+'animalEnergy" size="6"'
-										+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
-										+ ' value="'+animalData[increment].energyUnitIndex+'"> </td>' +	 '<td style="text-align: center;" id="'+(animalIndex+1)+'animalProtein" name="'+(animalIndex+1)+'animalProtein">'
-										+ animalData[increment].proteinUnitIndex + '</td>' 
-										+ '<td style="text-align: center;">'
-										+ '<input type="text" id="'+(animalIndex+1)+'feedDemand" name="'+(animalIndex+1)+'feedDemand" size="6"'
-										+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
-										+ ' value="'+nutritionEnergy+'"> </td>' 
-										+ '</tr>');		
-							}
-							else{
-							nutritionProtein = nutritionProtein
-											+ (animalData[increment].animalCount
-													* animalData[increment].nonForageRate * animalData[increment].proteinUnitIndex * 35600 );
-								nutritionProtein = (nutritionProtein+"").split(".")[0];					
-								$('#tableAnimal')
-								.append(
-									'<tr>' + '<td style="text-align: center;">' + animalData[increment].animalName + '</td>'  
-										+ '<td style="text-align: center;">'
-										+ '<input type="text" id="'+(animalIndex+1)+'animalCount" name="'+(animalIndex+1)+'animalCount" size="8"'
-										+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
-										+ ' value="'+animalData[increment].animalCount+'"> </td>'
-										+ '<td style="text-align: center;">'
-										+ '<input type="text" id="'+(animalIndex+1)+'animalNfg" name="'+(animalIndex+1)+'animalNfg" size="6"'
-										+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
-										+ ' value="'+animalData[increment].nonForageRate+'"> </td>' + '<td style="text-align: center;" id="'+(animalIndex+1)+'animalEnergy" name="'+(animalIndex+1)+'animalEnergy">'
-										+ animalData[increment].energyUnitIndex + '</td>' + '<td style="text-align: center;">'
-										+ '<td style="text-align: center;">'
-										+ '<input type="text" id="'+(animalIndex+1)+'animalProtein" name="'+(animalIndex+1)+'animalProtein" size="6"'
-										+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
-										+ ' value="'+animalData[increment].proteinUnitIndex+'"> </td>' + '<td style="text-align: center;" id="'+(animalIndex+1)+'feedDemand" name="'+(animalIndex+1)+'feedDemand">'
-										+ ' value="'+nutritionProtein +'"> '
-										+ '</td>' + '</tr>');		
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		
 				
-		$('#tableAqua')
-			.append(
-							' <tr><th style="text-align: center;" colspan="5">'+latestYear+':Aquaculture</th></tr>'
-							+'<tr>' 
-							+ '<th style="text-align: center;">Total Feed Demand (energy)</th>'
-							+ '<th style="text-align: center;">Total Feed Demand (protein)</th>'
-							+ '</tr>');
-		
-		for ( var increment in aquacultureData) {
-			if (countryName == aquacultureData[increment].countryName) {
-					if (latestYear == aquacultureData[increment].year) {
-						var nutritionEnergy = aquacultureData[increment].nutritionEnergy ;
-						nutritionEnergy = (nutritionEnergy+"").split(".")[0];	
-						var nutritionProtein = aquacultureData[increment].nutritionProtein;
-						nutritionProtein = (nutritionProtein+"").split(".")[0];	
-
-						$('#tableAqua')
-						.append(
-							'<tr>' + '<td style="text-align: center;">'
-								+ nutritionEnergy + '</td>' + '<td style="text-align: center;">'
-								+ nutritionProtein + '</td>' + '</tr>');		
+							if (latestYear == animalData[increment].year) {
+									var nutritionEnergy = 0;
+									var nutritionProtein = 0;
+								if(unitIndx=="Energy"){
+									nutritionEnergy = nutritionEnergy
+												+ (animalData[increment].animalCount
+														* animalData[increment].nonForageRate * animalData[increment].energyUnitIndex * 0.319);
+									nutritionEnergy = (nutritionEnergy+"").split(".")[0];
+									console.log(nutritionEnergy);
+									$('#tableAnimal')
+									.append(
+										'<tr>' + '<td style="text-align: center;">' + animalData[increment].animalName + '</td>'  
+											+ '<td style="text-align: center;">'
+											+ '<input type="text" id="'+(animalIndex+1)+'animalCount" name="'+(animalIndex+1)+'animalCount" size="8"'
+											+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
+											+ ' value="'+animalData[increment].animalCount+'"> </td>'
+											+ '<td style="text-align: center;">'
+											+ '<input type="text" id="'+(animalIndex+1)+'animalNfg" name="'+(animalIndex+1)+'animalNfg" size="6"'
+											+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
+											+ ' value="'+animalData[increment].nonForageRate+'"> </td>' 
+											+'<td style="text-align: center;">'
+											+ '<input type="text" id="'+(animalIndex+1)+'animalEnergy" name="'+(animalIndex+1)+'animalEnergy" size="6"'
+											+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
+											+ ' value="'+animalData[increment].energyUnitIndex+'"> </td>' +	 '<td style="text-align: center;" id="'+(animalIndex+1)+'animalProtein" name="'+(animalIndex+1)+'animalProtein">'
+											+ animalData[increment].proteinUnitIndex + '</td>' 
+											+ '<td style="text-align: center;">'
+											+ '<input type="text" id="'+(animalIndex+1)+'feedDemand" name="'+(animalIndex+1)+'feedDemand" size="6"'
+											+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
+											+ ' value="'+nutritionEnergy+'"> </td>' 
+											+ '</tr>');		
+								}
+								else{
+								nutritionProtein = nutritionProtein
+												+ (animalData[increment].animalCount
+														* animalData[increment].nonForageRate * animalData[increment].proteinUnitIndex * 35600 );
+									nutritionProtein = (nutritionProtein+"").split(".")[0];					
+									$('#tableAnimal')
+									.append(
+										'<tr>' + '<td style="text-align: center;">' + animalData[increment].animalName + '</td>'  
+											+ '<td style="text-align: center;">'
+											+ '<input type="text" id="'+(animalIndex+1)+'animalCount" name="'+(animalIndex+1)+'animalCount" size="8"'
+											+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
+											+ ' value="'+animalData[increment].animalCount+'"> </td>'
+											+ '<td style="text-align: center;">'
+											+ '<input type="text" id="'+(animalIndex+1)+'animalNfg" name="'+(animalIndex+1)+'animalNfg" size="6"'
+											+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
+											+ ' value="'+animalData[increment].nonForageRate+'"> </td>' + '<td style="text-align: center;" id="'+(animalIndex+1)+'animalEnergy" name="'+(animalIndex+1)+'animalEnergy">'
+											+ animalData[increment].energyUnitIndex + '</td>' + '<td style="text-align: center;">'
+											+ '<td style="text-align: center;">'
+											+ '<input type="text" id="'+(animalIndex+1)+'animalProtein" name="'+(animalIndex+1)+'animalProtein" size="6"'
+											+ 'maxlength="20" class="form-control" style="font-weight:bold ;text-align: center;"'
+											+ ' value="'+animalData[increment].proteinUnitIndex+'"> </td>' + '<td style="text-align: center;" id="'+(animalIndex+1)+'feedDemand" name="'+(animalIndex+1)+'feedDemand">'
+											+ ' value="'+nutritionProtein +'"> '
+											+ '</td>' + '</tr>');		
+								}
+							}
+			
 					}
 			}
 		}
+	}	
+		
+		if(latestYear!="All Years"){
+						$('#tableAqua')
+										.append(
+														' <tr><th style="text-align: center;" colspan="5">'+latestYear+':Aquaculture</th></tr>'
+														+'<tr>' 
+														+ '<th style="text-align: center;">Total Feed Demand (energy)</th>'
+														+ '<th style="text-align: center;">Total Feed Demand (protein)</th>'
+														+ '</tr>');
+									
+									for ( var increment in aquacultureData) {
+										if (countryName == aquacultureData[increment].countryName) {
+											if (latestYear == aquacultureData[increment].year) {
+												var nutritionEnergy = aquacultureData[increment].nutritionEnergy ;
+												nutritionEnergy = (nutritionEnergy+"").split(".")[0];	
+												var nutritionProtein = aquacultureData[increment].nutritionProtein;
+												nutritionProtein = (nutritionProtein+"").split(".")[0];	
+
+												$('#tableAqua')
+												.append(
+													'<tr>' + '<td style="text-align: center;">'
+														+ nutritionEnergy + '</td>' + '<td style="text-align: center;">'
+														+ nutritionProtein + '</td>' + '</tr>');		
+											}
+										}
+									}
+					}
+					else{
+										$('#tableAqua')
+										.append(
+														' <tr><th style="text-align: center;" colspan="5">'+latestYear+':Aquaculture</th></tr>'
+														+'<tr>' 
+														+ '<th style="text-align: center;">Total Feed Demand (energy)</th>'
+														+ '<th style="text-align: center;">Total Feed Demand (protein)</th>'
+														+ '</tr>');
+									var nutritionEnergy =0;
+									var nutritionProtein = 0;
+									for ( var increment in aquacultureData) {
+										if (countryName == aquacultureData[increment].countryName) {
+											
+												nutritionEnergy = nutritionEnergy*1 + aquacultureData[increment].nutritionEnergy*1 ;
+												
+												nutritionProtein = nutritionProtein*1 + aquacultureData[increment].nutritionProtein*1;
+												
+
+											
+										
+										
+									}
+								}
+									nutritionEnergy = (nutritionEnergy+"").split(".")[0];	
+									nutritionProtein = (nutritionProtein+"").split(".")[0];
+										$('#tableAqua')
+												.append(
+													'<tr>' + '<td style="text-align: center;">'
+														+ nutritionEnergy + '</td>' + '<td style="text-align: center;">'
+														+ nutritionProtein + '</td>' + '</tr>');				
+						
+					}			
+	
 		
 }	
 
@@ -562,11 +625,13 @@ function resetValue() {
 							<label for="selectYear">Select Year</label> <br /> <select class="selectBox"
 								id="selectYear" title='Choose one or more..'>
 								<option selected="selected" value="">Select one</option>
+								<option name="yearValue" value="All Years">
+												All Years</option>
 								<c:choose>
 									<c:when test="${not empty yearList}">
 										<c:forEach items="${yearList}" var="year"
 											varStatus="varStatus">
-
+											
 											<option name="yearValue" value="${year}">
 												${year}</option>
 										</c:forEach>
