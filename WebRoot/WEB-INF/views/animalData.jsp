@@ -21,8 +21,7 @@
 		}
 		
 		
-	function makeTable() {
-
+	function makeTable(propertyValue) {
 		var animalData = ${animalRawData};
 		var aquacultureData = ${aquacultureData};
 		var arrYears = ${yearList};
@@ -37,7 +36,7 @@
 		for ( var countryIndex = 0; countryIndex < arrCountry.length; countryIndex++) {
 			var countryName = arrCountry[countryIndex];
 
-			for ( var yearIndex = 0; yearIndex < arrYears.length; yearIndex++) {
+			for ( var yearIndex = 0; yearIndex <= arrYears.length; yearIndex++) {
 				var nutrition = 0;
 
 				var yearNo = arrYears[yearIndex];
@@ -46,12 +45,17 @@
 					if (countryName == animalData[increment].countryName) {
 						if (yearNo == animalData[increment].year) {
 							if (unitIndx == "Energy") {
+								console.log()
 								var energyIndex = animalData[increment].energyUnitIndex;
 								if (energyIndex != null
 										&& energyIndex !== undefined) {
+										
+										console.log(yearNo+"-"+nutrition+"-"+animalData[increment].animalCount +"-"+animalData[increment].nonForageRate+ "-"+energyIndex); 
 									nutrition = nutrition
 											+ (animalData[increment].animalCount
-													* animalData[increment].nonForageRate * energyIndex);
+													* animalData[increment].nonForageRate * energyIndex * 35600);
+									console.log(yearNo+"-"+nutrition+"-"+animalData[increment].animalCount +"-"+animalData[increment].nonForageRate+ "-"+energyIndex+"-"+(animalData[increment].animalCount
+													* animalData[increment].nonForageRate * energyIndex * 35600)); 				
 								}
 
 							} else {
@@ -61,7 +65,7 @@
 										&& proteinIndex !== undefined) {
 									nutrition = nutrition
 											+ (animalData[increment].animalCount
-													* animalData[increment].nonForageRate * proteinIndex);
+													* animalData[increment].nonForageRate * proteinIndex *0.319);
 								}
 
 							}
@@ -70,12 +74,7 @@
 					}
 
 				}
-				if (unitIndx == "Energy") {
-					nutrition = nutrition * 0.319;
-				} else {
-					nutrition = nutrition * 35600;
 
-				}
 				//aqua
 				for ( var aqua_increment in aquacultureData) {
 					if (countryName == aquacultureData[aqua_increment].countryName) {
@@ -86,41 +85,39 @@
 										&& energyIndex !== undefined) {
 									nutrition = nutrition
 											+ (aquacultureData[aqua_increment].nutritionEnergy * 1);
-										nutrition= formatNumber(nutrition);	
-								}
+									}
 							} else {
 								var proteinIndex = aquacultureData[aqua_increment].nutritionProtein;
 								if (proteinIndex != null
 										&& proteinIndex !== undefined) {
 									nutrition = nutrition
 											+ (aquacultureData[aqua_increment].nutritionProtein * 1);
-									nutrition= formatNumber(nutrition);
 								}
 
 							}
 						}
 					}
 				}
+				
+				nutrition = nutrition * parseInt(propertyValue);
+				nutrition= formatNumber(nutrition);
+				
 
-				if (yearIndex == arrYears.length - 1) {
-					/* console.log(countryIndex + countryName + yearIndex + "-"
-					+ yearNo + "-" + nutrition * 0.319 + "--"
-					+ arrYears.length); */
-					$('#table' + (countryIndex + 1))
+				if (yearIndex == arrYears.length ) {
+						$('#table' + (countryIndex + 1))
 							.prepend(
 									'<tr>'
-											+ '<th><a data-toggle="collapse" href="#collapseExample'
+											+ '<th><a data-toggle="collapse" href="#collapseTable'
 											+ (countryIndex + 1)
-											+ '" aria-expanded="false" aria-controls="#collapseExample'
+											+ '" aria-expanded="false" aria-controls="#collapseTable'
 											+ (countryIndex + 1)
 											+ '" style="color: lightseagreen">'
-											+ countryName + '</a>' + '</th>'
-											+ '<th>' + yearNo + '</th>'
-											+ '<th>' + (nutrition) + '</th>'
+											+ "Country       " + '</a>' + '</th>'
+											+ '<th>' + "Year     " + '</th>'
+											+ '<th>' + "Estimated Feed" + '</th>'
 											+ '</tr>');
 				} else {
-					/*console.log(countryIndex + countryName + yearIndex + "-"
-					+ yearNo + "-" + nutrition * 0.319); */
+					
 					$('#tableData' + (countryIndex + 1)).prepend(
 							'<tr>' + '<td>' + countryName + '</td>' + '<td>'
 									+ yearNo + '</td>' + '<td>' + (nutrition)
@@ -131,7 +128,7 @@
 		}
 	}
 
-	function makeProteinJson() {
+	function makeProteinJson(propertyValue) {
 
 		var animalData = ${animalRawData};
 		var aquacultureData = ${aquacultureData};
@@ -176,7 +173,8 @@
 						}
 					}
 				}
-				var v =nutritionProtein * 35600 + aquaNutritionProtein * 1; 
+				var v =nutritionProtein * 0.319 + aquaNutritionProtein * 1; 
+				v=v * propertyValue;
 				v = formatNumberRoundOff(v);
 				resultArray.push(v);
 				
@@ -209,7 +207,7 @@
 
 	}
 
-	function makeEnergyJson() {
+	function makeEnergyJson(propertyValue) {
 
 		var animalData = ${animalRawData};
 		var aquacultureData = ${aquacultureData};
@@ -258,7 +256,9 @@
 						}
 					}
 				}
-				var v = nutritionEnergy * 0.319 + aquaNutritionEnergy * 1;
+				var v = nutritionEnergy * 35600 + aquaNutritionEnergy * 1;
+				v=v * propertyValue;
+				console.log("Property value "+propertyValue);
 				v = formatNumberRoundOff(v);
 				resultArray.push(v);
 			}
@@ -295,11 +295,31 @@
 					function() {
 
 						var unitIndx = "${unitIndex}";
+						var propertyValue = "${propertyValue}";
+						var propertyName = "${propertyName}";
+						var energyType ;
+						if(unitIndx == "Energy")
+						{	
+							energyType = "MJ";
+						}
+						else
+						{
+							energyType = "Tonnes";
+						}
+						
+						if(propertyValue == "")
+						{
+						propertyValue = 1;
+						}
+						else
+						{
+						propertyValue = parseFloat(propertyValue);
+						}
 						var arrYears = ${yearList};
 						if (unitIndx == "Energy") {
-							var jsonData = makeEnergyJson();
+							var jsonData = makeEnergyJson(propertyValue);
 						} else {
-							var jsonData = makeProteinJson();
+							var jsonData = makeProteinJson(propertyValue);
 						}
 
 						$('#lineChartDiv').highcharts({
@@ -320,7 +340,12 @@
 									value : 0,
 									width : 1,
 									color : '#808080'
-								} ]
+								} ],
+								
+								title: {
+                                        text: energyType
+                                    }
+									
 							},
 							credits : {
 								enabled : false
@@ -378,7 +403,7 @@
 										}
 									}
 									
-									resultArray.push(formatNumberRoundOff(nutritionEnergy * 0.319));
+									resultArray.push(formatNumberRoundOff(nutritionEnergy * 35600));
 
 								}
 								for ( var aqua_increment in aquacultureData) {
@@ -411,7 +436,7 @@
 											}
 										}
 									}
-									resultArray.push(formatNumberRoundOff(nutritionProtein * 35600));
+									resultArray.push(formatNumberRoundOff(nutritionProtein * 0.319));
 								}
 								for ( var aqua_increment in aquacultureData) {
 									if (countryName == aquacultureData[aqua_increment].countryName) {
@@ -482,32 +507,34 @@
 											});
 						}
 						//Generate Table
-						makeTable();
-					});
+						makeTable(propertyValue);
+						
+						var arrYears = ${yearList};
+					var latestYear = arrYears[arrYears.length - 1];
+					 $("#para").text('Share of different animal types/species of total estimated feed demand(Year:'+latestYear+')');
+					}
+					
+					);
 </script>
 
 <div class="row" style="padding-top: 40px">
 	<div class="col-md-12" id="lineChartDiv"></div>
 </div>
-<div >
-	</br>
-	</br>
-</div>
 
-<div >
-	<P ALIGN="CENTER">Share of different animal types/species of total estimated feed demand</P>
-</div>
+
 <div class="row" style="padding-top: 20px">
 	<div class="col-md-4" style="display: inline-block;" id="pieChartDiv1"></div>
 	<div class="col-md-4" style="display: inline-block;" id="pieChartDiv2"></div>
 	<div class="col-md-4" style="display: inline-block;" id="pieChartDiv3"></div>
 </div>
-
+<div >
+	<P id="para" ALIGN="CENTER"></P>
+</div>
 <div class="row" style="padding-top: 20px">
 	<div class="col-md-4" style="display: inline-block;" id="tableDiv1">
 		<table class="bordered" id='table1'>
 		</table>
-		<div class="collapse bordered" id="collapseExample1">
+		<div class="collapse bordered" id="collapseTable1">
 			<table id='tableData1'>
 			</table>
 		</div>
@@ -515,7 +542,7 @@
 	<div class="col-md-4" style="display: inline-block;" id="tableDiv2">
 		<table class="bordered" id='table2'>
 		</table>
-		<div class="collapse bordered" id="collapseExample2">
+		<div class="collapse bordered" id="collapseTable2">
 			<table id='tableData2'>
 			</table>
 		</div>
@@ -523,7 +550,7 @@
 	<div class="col-md-4" style="display: inline-block;" id="tableDiv3">
 		<table class="bordered" id='table3'>
 		</table>
-		<div class="collapse bordered" id="collapseExample3">
+		<div class="collapse bordered" id="collapseTable3">
 			<table id='tableData3'>
 			</table>
 		</div>

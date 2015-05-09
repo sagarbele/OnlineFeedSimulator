@@ -225,11 +225,11 @@ public class SendReport {
 			
 			}	
 			if (unitIndex.equals("Energy")) {
-				nutrition = nutrition.multiply(new BigDecimal(0.319));
-				nutritionNew = nutritionNew.multiply(new BigDecimal(0.319));
-			} else {
 				nutrition = nutrition.multiply(new BigDecimal(35600));
 				nutritionNew = nutritionNew.multiply(new BigDecimal(35600));
+			} else {
+				nutrition = nutrition.multiply(new BigDecimal(0.319));
+				nutritionNew = nutritionNew.multiply(new BigDecimal(0.319));
 			}
 			//aqua
 			for (AquacultureData aqmd : aquacultureData) {

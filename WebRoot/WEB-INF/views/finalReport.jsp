@@ -35,6 +35,20 @@
 
 
 <script type="text/javascript">
+function formatNumber (num) {
+		var myNumberAsString = num;           
+		var myNumber = Math.round(0.0 + myNumberAsString); 
+		parseInt(myNumber);
+		return myNumber.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,"); 
+		}
+		
+		function formatNumberRoundOff (num) {
+		var myNumberAsString = num;           
+		var myNumber = Math.round(0.0 + myNumberAsString); 
+		return parseInt(myNumber); 
+		}
+		
+		
 	function getPieChart() {
 		var animalData = ${animalRawData};
 		var aquacultureData = ${aquacultureData};
@@ -86,7 +100,7 @@
 								}
 							}
 						}
-						resultArray.push(nutritionEnergy * 0.319);
+						resultArray.push(nutritionEnergy * 35600);
 					}
 				} else {
 					for ( var animalIndex = 0; animalIndex < arrayAnimal.length; animalIndex++) {
@@ -108,7 +122,7 @@
 								}
 							}
 						}
-						resultArray.push(nutritionEnergy * 0.319);
+						resultArray.push(nutritionEnergy * 35600);
 					}
 				}
 				for ( var aqua_increment in aquacultureData) {
@@ -141,7 +155,7 @@
 								}
 							}
 						}
-						resultArray.push(nutritionProtein * 35600);
+						resultArray.push(nutritionProtein * 0.319);
 					}
 				} else {
 					for ( var animalIndex = 0; animalIndex < arrayAnimal.length; animalIndex++) {
@@ -163,7 +177,7 @@
 								}
 							}
 						}
-						resultArray.push(nutritionProtein * 35600);
+						resultArray.push(nutritionProtein * 0.319);
 					}
 				}
 				for ( var aqua_increment in aquacultureData) {
@@ -237,7 +251,7 @@
 
 	}
 
-	function makeProteinJson() {
+	function makeProteinJson(propertyValue) {
 		var animalData = ${animalRawData};
 		var aquacultureData = ${aquacultureData};
 		var arrYears = ${yearList};
@@ -293,8 +307,10 @@
 					}
 				}
 			}
-			resultArray.push(nutritionProtein * 35600 + aquaNutritionProtein
-					* 1);
+					var v =nutritionProtein * 0.319 + aquaNutritionProtein * 1; 
+				v=v * propertyValue;
+				v = formatNumberRoundOff(v);
+				resultArray.push(v);
 		}
 
 		//Old Data
@@ -330,8 +346,10 @@
 					}
 				}
 			}
-			resultArray.push(nutritionProtein * 35600 + aquaNutritionProtein
-					* 1);
+				var v =nutritionProtein * 0.319 + aquaNutritionProtein * 1; 
+				v=v * propertyValue;
+				v = formatNumberRoundOff(v);
+				resultArray.push(v);
 		}
 
 		var myarray = [];
@@ -351,7 +369,7 @@
 
 	}
 
-	function makeEnergyJson() {
+	function makeEnergyJson(propertyValue) {
 
 		var animalData = ${animalRawData};
 		var aquacultureData = ${aquacultureData};
@@ -409,7 +427,10 @@
 					}
 				}
 			}
-			resultArray.push(nutritionEnergy * 0.319 + aquaNutritionEnergy * 1);
+			var v = nutritionEnergy * 35600 + aquaNutritionEnergy * 1;
+				v=v * propertyValue;
+				v = formatNumberRoundOff(v);
+				resultArray.push(v);
 		}
 
 		//Old Data
@@ -445,7 +466,10 @@
 					}
 				}
 			}
-			resultArray.push(nutritionEnergy * 0.319 + aquaNutritionEnergy * 1);
+			var v = nutritionEnergy * 35600 + aquaNutritionEnergy * 1;
+				v=v * propertyValue;
+				v = formatNumberRoundOff(v);
+				resultArray.push(v);
 		}
 
 		var myarray = [];
@@ -475,169 +499,170 @@
 	}
 
 	function reportChanges() {
-		$('#collapseTable').empty();
-		$('#collapseInfoTable').empty();
-		var nfgRate = "${nfgRate}";
-		var nfgList;
-		nfgList = nfgRate.split(",");
-		
-		var listAnimalName = "${animalNameList}";
-		var listAnimalName = listAnimalName.replace("[", "");
-		var listAnimalName = listAnimalName.replace("]", "");
-		var arrayAnimalName;
-		arrayAnimalName = listAnimalName.split(",");
-		
-		var animalData = ${animalRawData};
-		var aquacultureData = ${aquacultureData};
-		var arrYears = ${yearList};
-		var resultArray = [];
-		var countryName = "${countryName}";
-		var unitIndx = "${unitIndex}";
-						
-		for ( var yearIndex = 0; yearIndex < arrYears.length; yearIndex++) {
-			var nutrition = 0;
-			var nutritionNew = 0;
-			var yearNo = arrYears[yearIndex];
+				$('#collapseTable').empty();
+				$('#collapseInfoTable').empty();
+				$('#collapseSendTable').empty();
+				var nfgRate = "${nfgRate}";
+				var nfgList;
+				nfgList = nfgRate.split(",");
 				
-			for ( var increment in animalData) {
-				if (countryName == animalData[increment].countryName) {
-					if (yearNo == animalData[increment].year) {
-						if (unitIndx == "Energy") {
-							var energyIndex = animalData[increment].energyUnitIndex;
-							if (energyIndex != null
-									&& energyIndex !== undefined) {
-								nutrition = nutrition
-										+ (animalData[increment].animalCount
-												* animalData[increment].nonForageRate * energyIndex);
+				var listAnimalName = "${animalNameList}";
+				var listAnimalName = listAnimalName.replace("[", "");
+				var listAnimalName = listAnimalName.replace("]", "");
+				var arrayAnimalName;
+				arrayAnimalName = listAnimalName.split(",");
+				
+				var animalData = ${animalRawData};
+				var aquacultureData = ${aquacultureData};
+				var arrYears = ${yearList};
+				var resultArray = [];
+				var countryName = "${countryName}";
+				var unitIndx = "${unitIndex}";
+							
+					for ( var yearIndex = 0; yearIndex < arrYears.length; yearIndex++) {
+						var nutrition = 0;
+						var nutritionNew = 0;
+						var yearNo = arrYears[yearIndex];
+							
+						for ( var increment in animalData) {
+							if (countryName == animalData[increment].countryName) {
+								if (yearNo == animalData[increment].year) {
+									if (unitIndx == "Energy") {
+										var energyIndex = animalData[increment].energyUnitIndex;
+										if (energyIndex != null
+												&& energyIndex !== undefined) {
+											nutrition = nutrition
+													+ (animalData[increment].animalCount
+															* animalData[increment].nonForageRate * energyIndex);
+										}
+
+									} else {
+
+										var proteinIndex = animalData[increment].proteinUnitIndex;
+										if (proteinIndex != null
+												&& proteinIndex !== undefined) {
+											nutrition = nutrition
+													+ (animalData[increment].animalCount
+															* animalData[increment].nonForageRate * proteinIndex);
+										}
+
+									}
+
+								}
 							}
-
-						} else {
-
-							var proteinIndex = animalData[increment].proteinUnitIndex;
-							if (proteinIndex != null
-									&& proteinIndex !== undefined) {
-								nutrition = nutrition
-										+ (animalData[increment].animalCount
-												* animalData[increment].nonForageRate * proteinIndex);
-							}
-
 						}
+						
+						for ( var animalIndex = 0; animalIndex < arrayAnimalName.length; animalIndex++) {
+							var animalName = arrayAnimalName[animalIndex].trim();
+							
+							for ( var increment in animalData) {
+								if (countryName == animalData[increment].countryName) {					
+									if(animalName == animalData[increment].animalName){
+										var nfgValue = nfgList[animalIndex].replace(
+												(animalIndex + 1) + "a-", "");
+												
+										if (yearNo == animalData[increment].year) {
+										if (unitIndx == "Energy") {
+											var energyIndex = animalData[increment].energyUnitIndex;
+											if (energyIndex != null
+													&& energyIndex !== undefined) {
+												nutritionNew = nutritionNew
+														+ (animalData[increment].animalCount
+																* nfgValue * energyIndex);
+											}
 
-					}
-				}
-			}
-			
-			for ( var animalIndex = 0; animalIndex < arrayAnimalName.length; animalIndex++) {
-				var animalName = arrayAnimalName[animalIndex].trim();
-				
-				for ( var increment in animalData) {
-					if (countryName == animalData[increment].countryName) {					
-						if(animalName == animalData[increment].animalName){
-							var nfgValue = nfgList[animalIndex].replace(
-									(animalIndex + 1) + "a-", "");
+										} else {
+
+											var proteinIndex = animalData[increment].proteinUnitIndex;
+											if (proteinIndex != null
+													&& proteinIndex !== undefined) {
+												nutritionNew = nutritionNew
+														+ (animalData[increment].animalCount
+																* nfgValue * proteinIndex);
+											}
+
+										}
+
+									}
 									
-							if (yearNo == animalData[increment].year) {
-							if (unitIndx == "Energy") {
-								var energyIndex = animalData[increment].energyUnitIndex;
-								if (energyIndex != null
-										&& energyIndex !== undefined) {
-									nutritionNew = nutritionNew
-											+ (animalData[increment].animalCount
-													* nfgValue * energyIndex);
-								}
-
-							} else {
-
-								var proteinIndex = animalData[increment].proteinUnitIndex;
-								if (proteinIndex != null
-										&& proteinIndex !== undefined) {
-									nutritionNew = nutritionNew
-											+ (animalData[increment].animalCount
-													* nfgValue * proteinIndex);
+									}
+									
+									
 								}
 
 							}
-
-						}
 						
-						}
-						
-						
-					}
-
-				}
-			
-			}	
-			if (unitIndx == "Energy") {
-				nutrition = nutrition * 0.319;
-				nutritionNew = nutritionNew * 0.319;
-			} else {
-				nutrition = nutrition * 35600;
-				nutritionNew = nutritionNew * 35600;
-			}
-			//aqua
-			for ( var aqua_increment in aquacultureData) {
-				if (countryName == aquacultureData[aqua_increment].countryName) {
-					if (yearNo == aquacultureData[aqua_increment].year) {
+						}	
 						if (unitIndx == "Energy") {
-							var energyIndex = aquacultureData[aqua_increment].nutritionEnergy;
-							if (energyIndex != null
-									&& energyIndex !== undefined) {
-								nutrition = nutrition
-										+ (aquacultureData[aqua_increment].nutritionEnergy * 1);
-								nutritionNew = nutritionNew
-										+ (aquacultureData[aqua_increment].nutritionEnergy * 1);		
-							}
+							nutrition = nutrition * 35600;
+							nutritionNew = nutritionNew * 35600;
 						} else {
-							var proteinIndex = aquacultureData[aqua_increment].nutritionProtein;
-							if (proteinIndex != null
-									&& proteinIndex !== undefined) {
-								nutrition = nutrition
-										+ (aquacultureData[aqua_increment].nutritionProtein * 1);
-								nutritionNew = nutritionNew
-										+ (aquacultureData[aqua_increment].nutritionProtein * 1);		
-
-							}
-
+							nutrition = nutrition * 0.319;
+							nutritionNew = nutritionNew * 0.319;
 						}
-					}
-				}
-			}
+						//aqua
+						for ( var aqua_increment in aquacultureData) {
+							if (countryName == aquacultureData[aqua_increment].countryName) {
+								if (yearNo == aquacultureData[aqua_increment].year) {
+									if (unitIndx == "Energy") {
+										var energyIndex = aquacultureData[aqua_increment].nutritionEnergy;
+										if (energyIndex != null
+												&& energyIndex !== undefined) {
+											nutrition = nutrition
+													+ (aquacultureData[aqua_increment].nutritionEnergy * 1);
+											nutritionNew = nutritionNew
+													+ (aquacultureData[aqua_increment].nutritionEnergy * 1);		
+										}
+									} else {
+										var proteinIndex = aquacultureData[aqua_increment].nutritionProtein;
+										if (proteinIndex != null
+												&& proteinIndex !== undefined) {
+											nutrition = nutrition
+													+ (aquacultureData[aqua_increment].nutritionProtein * 1);
+											nutritionNew = nutritionNew
+													+ (aquacultureData[aqua_increment].nutritionProtein * 1);		
 
+										}
+
+									}
+								}
+							}
+						}
+
+
+							$('#collapseTable').prepend(
+
+									'<tr><td style="text-align: center;">' + yearNo + '</td>' + '<td style="text-align: center;">'
+											+ (nutrition) + '</td>' + '<td style="text-align: center;">' + (nutritionNew)
+											+ '</td></tr>');
+					}
 
 				$('#collapseTable').prepend(
-
-						'<tr><td style="text-align: center;">' + yearNo + '</td>' + '<td style="text-align: center;">'
-								+ (nutrition) + '</td>' + '<td style="text-align: center;">' + (nutritionNew)
-								+ '</td></tr>');
-		}
-
-			$('#collapseTable').prepend(
-					'<tr><th style="text-align: center;" colspan="5" style="color: lightseagreen">'+countryName+'</th></tr>'
-					+'<tr><th style="text-align: center;"> Year </th><th style="text-align: center;"> Old Data </th><th style="text-align: center;"> New Data </th></tr>');
-		
-			$('#collapseInfoTable').append(
-					'<tr><td style="text-align: center;" colspan="6" style="color: lightseagreen">Reporter Information</td></tr>'
-					+'<tr>'
-					+'<td style="text-align: right;"> Name </td>'
-					+'<td style="text-align: left;"> '
-						+ '<input type="text" id="reporterName" name="reporterName" size="8"'
-									+ 'class="form-control" style="font-weight:bold ;text-align: center;"> </td>'
-					+'<td style="text-align: right;"> Email </td>'
-					+'<td style="text-align: left;"> '
-						+ '<input type="text" id="reporterEmail" name="reporterEmail" size="8"'
-									+ 'class="form-control" style="font-weight:bold ;text-align: center;"> </td>'
-					+'<td style="text-align: right;"> Comments </td>'				
-					+'<td style="text-align: left;"> '
-						+ '<input type="text" id="reporterComments" name="reporterComments" size="8"'
-									+ 'class="form-control" style="font-weight:bold ;text-align: center;"> </td>'				
-					+'</tr>'
+						'<tr><th style="text-align: center;" colspan="5" style="color: lightseagreen">'+countryName+'</th></tr>'
+						+'<tr><th style="text-align: center;"> Year </th><th style="text-align: center;"> Old Data </th><th style="text-align: center;"> New Data </th></tr>');
 			
-					 
-					);
-			$('#collapseSendTable').append(
-					'<tr><td style="text-align: center;margin-top:20px" colspan="6"><button type="button" class="btn btn-default" onclick="sendMail();">Send E-mail</button></td></tr>'
-			);				
+				$('#collapseInfoTable').append(
+						'<tr><td style="text-align: center;" colspan="6" style="color: lightseagreen">Reporter Information</td></tr>'
+						+'<tr>'
+						+'<td style="text-align: right;"> Name </td>'
+						+'<td style="text-align: left;"> '
+							+ '<input type="text" id="reporterName" name="reporterName" size="8"'
+										+ 'class="form-control" style="font-weight:bold ;text-align: center;"> </td>'
+						+'<td style="text-align: right;"> Email </td>'
+						+'<td style="text-align: left;"> '
+							+ '<input type="text" id="reporterEmail" name="reporterEmail" size="8"'
+										+ 'class="form-control" style="font-weight:bold ;text-align: center;"> </td>'
+						+'<td style="text-align: right;"> Comments </td>'				
+						+'<td style="text-align: left;"> '
+							+ '<input type="text" id="reporterComments" name="reporterComments" size="8"'
+										+ 'class="form-control" style="font-weight:bold ;text-align: center;"> </td>'				
+						+'</tr>'
+				
+						 
+						);
+				$('#collapseSendTable').append(
+						'<tr><td style="text-align: center;margin-top:20px" colspan="6"><button type="button" class="btn btn-default" onclick="sendMail();">Send E-mail</button></td></tr>'
+				);				
 
 			}
 		
@@ -671,11 +696,30 @@
 
 	$(document).ready(function() {
 		var unitIndx = "${unitIndex}";
+		var propertyValue = "${propertyValue}";
+		var propertyName = "${propertyName}";
+		var energyType ;
+		if(unitIndx == "Energy")
+		{	
+			energyType = "kcal";
+		}
+		else
+		{
+			energyType = "MJ";
+		}
+		if(propertyValue == "")
+		{
+		propertyValue = 1;
+		}
+		else
+		{
+		propertyValue = parseFloat(propertyValue);
+		}
 		var arrYears = ${yearList};
 		if (unitIndx == "Energy") {
-			var jsonData = makeEnergyJson();
+			var jsonData = makeEnergyJson(propertyValue);
 		} else {
-			var jsonData = makeProteinJson();
+			var jsonData = makeProteinJson(propertyValue);
 		}
 
 		$('#lineChartDiv').highcharts({
@@ -696,7 +740,11 @@
 					value : 0,
 					width : 1,
 					color : '#808080'
-				} ]
+				} ],
+				
+				title: {
+                        text: energyType
+                       }
 			},
 			credits : {
 				enabled : false
@@ -737,26 +785,22 @@
 			</ol>
 
 			<div class="container" id="page" style="padding-top: 60px">
-				<h4>
-					<b><div class="row"
-							style="margin-left: 20px; margin-right: 20px; margin-top: 30px; margin-bottom: 50px; background-color: #ADD5F7;">
-							<div class="col-md-4" align="left">
-								<button type="button" class="btn btn-default">Country/Region
-									: ${countryName}</button>
-							</div>
-							<div class="col-md-4" align="center">
-								<button type="button" class="btn btn-default">Property
-									Name : ${propertyName}</button>
-							</div>
-							<div class="col-md-4" align="right">
-								<button type="button" class="btn btn-default">Unit
-									Index : ${unitIndex}</button>
-							</div>
-						</div></b>
-				</h4>
-
+				<div>
+				<div class="col-md-4" align="left">
+                    <button type="button" class="btn btn-default">Country/Region
+                    : ${countryName}</button>
+                    </div>
+                    <div class="col-md-4" align="center">
+                    <button type="button" class="btn btn-default">Base Commodity : ${propertyName}</button>
+                    </div>
+                    <div class="col-md-4" align="right">
+                    <button type="button" class="btn btn-default">Animal Unit
+                    Index : ${unitIndex}</button>
+                    </div>
+				</div>
+				
 				<div class="row" style="margin-top: 30px">
-					<div class="col-md-1">
+					<div class="col-md-1" style="margin-top: 30px" class="col-md-12" align="center">
 						<button type="button" class="btn btn-default"
 							data-toggle="collapse" onclick="reportChanges();"
 							data-target="#collapseDiv" aria-expanded="false"

@@ -50,6 +50,8 @@
 							width : '150px'
 						});
 
+						
+						
 
                         if($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!="" && $('#selectIndex').val()!="" && $('#selectCountry').val().length>1) {
                         $('#scenarioAnalysis').prop('disabled', true);
@@ -61,6 +63,13 @@
                         $('#visualize').prop('disabled', false);
                         console.log('enabled: '+$('#selectCountry').val().length);
                         }
+						else if($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!=""  && $('#selectCountry').val().length>=1) {
+								$('#scenarioAnalysis').prop('disabled', true);
+								$('#visualize').prop('disabled', false);
+								console.log('disabled: '+$('#selectCountry').val().length);
+							}
+						
+						
                         else
                         {
                         $('#scenarioAnalysis').prop('disabled', true);
@@ -79,13 +88,18 @@
                                $('#visualize').prop('disabled', false);
                                console.log('enabled: '+$('#selectCountry').val().length);
                             }
+							else if($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!=""  && $('#selectCountry').val().length>=1) {
+								$('#scenarioAnalysis').prop('disabled', true);
+								$('#visualize').prop('disabled', false);
+								console.log('disabled: '+$('#selectCountry').val().length);
+							}
                             else
                             {
                                $('#scenarioAnalysis').prop('disabled', true);
                                $('#visualize').prop('disabled', true);
                             }
 
-                            console.log($('#selectEnergyEquivalent').val());
+                         //   console.log($('#selectEnergyEquivalent').val());
 
                         });
 
@@ -103,10 +117,12 @@
 			country = country.concat(",");
 		});
 
-        var property = $("input[name='selectEnergyEquivalent']:checked").val();
-	 	var unitIndex = $("#selectIndex option:selected").val().trim()
-				.toString();
-
+        var property =  $("#selectIndex option:selected").val().trim().toString();
+	 	var unitIndex =$("input[name='selectEnergyEquivalent']:checked").val();
+				
+		//alert(property);
+		//alert(unitIndex);
+		
 		jQuery.ajax({
 			type : "GET",
 			url : getContextPath() + "/getData.html",
@@ -135,15 +151,15 @@
 	function getScenarioData() {
 		var country = "";
 		$.each($("#selectCountry option:selected"), function() {
-			country = country.concat($(this).val());
+			country = country.concat($(this).val()).toString();
 		});
 
-		var property = $("input[name='selectEnergyEquivalent']:checked").val();
+		var property =  $("#selectIndex option:selected").val().trim()
         
 
-		var unitIndex = $("#selectIndex option:selected").val().trim()
-				.toString();
-
+		var unitIndex =$("input[name='selectEnergyEquivalent']:checked").val();
+				
+		
 		window.location.href = getContextPath()
 				+ "/showSimulator.html?country=" + country + "&property="
 				+ property + "&unitIndex=" + unitIndex;
@@ -217,8 +233,8 @@
 						<option value="Energy">Energy(kcal)</option>
 						<option value="Protein">Protein</option>
 					</select> -->
-					 <label><input type="radio" name="selectEnergyEquivalent" value="Energy" checked="checked" >Energy(kcal)</label> 
-					 <label><input type="radio" name="selectEnergyEquivalent" value="Protein" >Protein</label>
+					 <label><input type="radio" name="selectEnergyEquivalent" value="Energy" checked="checked" >Energy(MJ)</label> 
+					 <label><input type="radio" name="selectEnergyEquivalent" value="Protein" >Protein(Tonnes)</label>
 				</div>
 			</div>
 		</div>

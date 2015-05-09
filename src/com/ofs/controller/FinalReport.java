@@ -27,7 +27,7 @@ import com.ofs.service.PropertyService;
  * 
  */
 @Controller
-public class ScenarioAnalysis {
+public class FinalReport {
 
 	@Autowired
 	private AnimalService animalService;
@@ -44,12 +44,18 @@ public class ScenarioAnalysis {
 	@Autowired
 	private PropertyService propertyService;
 
+	/*
+	 * @RequestMapping(value = "/index", method = RequestMethod.GET) public
+	 * ModelAndView welcome() { return new ModelAndView("index"); }
+	 */
+
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/showSimulator", method = RequestMethod.GET)
+	@RequestMapping(value = "/finalReport", method = RequestMethod.GET)
 	public String getAllData(
 			@RequestParam(value = "country", required = false) Integer countryId,
 			@RequestParam(value = "unitIndex", required = false) String unitIndex,
 			@RequestParam(value = "property", required = false) String propertyName,
+			@RequestParam(value = "nfgRate", required = false) String nfgRate,
 			Model model) {
 
 		/*
@@ -69,23 +75,19 @@ public class ScenarioAnalysis {
 		for (Property pdata : propertyList) {
 			propertyValue = pdata.getPropertyValue();
 		}
-		model.addAttribute("propertyValue", propertyValue);
-		model.addAttribute("unitIndex", unitIndex);
-		model.addAttribute("propertyName", propertyName);
-		model.addAttribute("country",countryId);
 
-		List<CountryDetail> allCountryList = countryService.getCountryData();
-		
-		List<Property> completePropertyList = propertyService.getPropertyData();
-		
-		model.addAttribute("propertyList",completePropertyList);
-		model.addAttribute("countryList",allCountryList);
+		model.addAttribute("propertyValue", propertyValue);
+		model.addAttribute("propertyName", propertyName);
+		model.addAttribute("unitIndex", unitIndex);
+		model.addAttribute("nfgRate",nfgRate);
+		model.addAttribute("countryId",countryId);
 		/*
 		 * Get Animal Data for selected countries
 		 */
 		List<AnimalData> animalData = animalService.getAnimalData(countryId);
+
 		/*
-		 * Get list of countries
+		 * Get list of countries with country Name
 		 */
 		
 		List<CountryDetail> countryList = countryService.getCountryData(countryId);
@@ -93,23 +95,29 @@ public class ScenarioAnalysis {
 			model.addAttribute("countryName", cData.getCountryName());
 		}
 		
+		
 		/*
 		 * Get Year List
 		 */
 		List<Integer> yearList = animalService.getYearList();
 		model.addAttribute("yearList", yearList);
-		/*
-		 * Get Animal List
-		 */
-		List<AnimalList> animalList = animalListService.getAnimalList();
-		model.addAttribute("animalList", animalList);
-		model.addAttribute("animalListSize", animalList.size());
 		
 		/*
 		 * Get Animal Name list
 		 */
 		List<String> animalNameList = animalListService.getAnimalNameList();
 		model.addAttribute("animalNameList", animalNameList);
+		
+		/*
+		 * Get Animal List
+		 */
+		List<AnimalList> animalList = animalListService.getAnimalList();
+		String animalNames = "";
+		for(AnimalList anmList :animalList )
+		{
+			animalNames= animalNames.concat(anmList.getAnimalName()+",");
+		}
+		model.addAttribute("animalList", animalNames);
 		/*
 		 * Convert data in json format
 		 */
@@ -167,7 +175,7 @@ public class ScenarioAnalysis {
 		responseAquaDetailsJson.put("aquacultureData", jsonArrayAquaData);
 		model.addAttribute("aquacultureData", jsonArrayAquaData);
 
-		return "showSimulator";
+		return "finalReport";
 	}
 
 }
