@@ -29,6 +29,11 @@ public class PropertyDaoImpl implements PropertyDao {
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Property> getAllPropertyData() {
+		return (List<Property>) sessionFactory.getCurrentSession().createCriteria(Property.class).list();
+	}
+	
+	@SuppressWarnings("unchecked")
 	public List<Property> getPropertyData(String propertyName,String propertyType) {
 		return (List<Property>) sessionFactory.getCurrentSession().createCriteria(Property.class).
 				add(Restrictions.eq("propertyName", propertyName)).

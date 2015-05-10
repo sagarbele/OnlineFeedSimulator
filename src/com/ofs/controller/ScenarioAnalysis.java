@@ -1,6 +1,8 @@
 package com.ofs.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -52,6 +54,7 @@ public class ScenarioAnalysis {
 			@RequestParam(value = "property", required = false) String propertyName,
 			Model model) {
 
+	
 		/*
 		 * Get Property Value
 		 */
@@ -75,15 +78,39 @@ public class ScenarioAnalysis {
 		model.addAttribute("country",countryId);
 
 		List<CountryDetail> allCountryList = countryService.getCountryData();
-		
+
 		List<Property> completePropertyList = propertyService.getPropertyData();
 		
 		model.addAttribute("propertyList",completePropertyList);
 		model.addAttribute("countryList",allCountryList);
+		
+		List<Property> propertyListValues = propertyService.getAllPropertyData();
+		Map<String, String> propMapVal = new HashMap<String, String>();
+		String propVal="";
+		for (Property propMap : propertyListValues) {
+			if(propMap.getPropertyType().equals("PROTEIN (%)")){
+				propVal=propMap.getPropertyName().replace(" ","")+"Protein";				
+			}
+			else{
+				propVal=propMap.getPropertyName().replace(" ","")+"Energy";
+			}
+			propMapVal.put(propVal, propMap.getPropertyValue());
+		}
+		model.addAttribute("propertyMap", propMapVal);
+		
+		Map<Integer, String> countryMap = new HashMap<Integer, String>();
+		
+		for (CountryDetail country : allCountryList) {
+			countryMap.put(country.getCountryId(), country.getCountryName());
+		}
+		model.addAttribute("countryMap", countryMap);
+		
+		
+		
 		/*
 		 * Get Animal Data for selected countries
 		 */
-		List<AnimalData> animalData = animalService.getAnimalData(countryId);
+		List<AnimalData> animalData = animalService.getAnimalData();
 		/*
 		 * Get list of countries
 		 */
@@ -143,7 +170,7 @@ public class ScenarioAnalysis {
 		 * Get Aquaculture Data for selected countries
 		 */
 		List<AquacultureData> aquacultureData = aquacultureService
-				.getAquacultureData(countryId);
+				.getAquacultureData();
 
 		/*
 		 * Convert Data in Json Format

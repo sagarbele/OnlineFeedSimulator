@@ -12,6 +12,8 @@ import com.ofs.model.Property;
 public interface PropertyDao {
 	
 	public List<Property> getPropertyData();
+	
+	public List<Property> getAllPropertyData();
 
 	public List<Property> getPropertyData(String propertyName,String propertyType);
 }

@@ -28,6 +28,9 @@ public class PropertyServiceImpl implements PropertyService {
 		return propertyDao.getPropertyData();
 	}
 	
+	public List<Property> getAllPropertyData(){
+		return propertyDao.getAllPropertyData();
+	}
 	
 	public List<Property> getPropertyData(String propertyName,String propertyType) {
 		return propertyDao.getPropertyData(propertyName,propertyType);

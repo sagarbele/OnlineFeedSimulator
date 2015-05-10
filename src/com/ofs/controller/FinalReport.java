@@ -50,7 +50,7 @@ public class FinalReport {
 	 */
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/finalReport", method = RequestMethod.GET)
+	@RequestMapping(value = "/finalReport", method = RequestMethod.POST)
 	public String getAllData(
 			@RequestParam(value = "country", required = false) Integer countryId,
 			@RequestParam(value = "unitIndex", required = false) String unitIndex,
@@ -65,7 +65,7 @@ public class FinalReport {
 		if (unitIndex.equals("Energy")) {
 			propertyType = "ENERGY (MJ/kg)";
 		}
-
+	
 		if (unitIndex.equals("Protein")) {
 			propertyType = "PROTEIN (%)";
 		}
