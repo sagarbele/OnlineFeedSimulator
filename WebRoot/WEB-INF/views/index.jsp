@@ -36,16 +36,27 @@
 	$(document)
 			.ready(
 					function() {
-
-						$('#selectCountry').selectpicker({
+						$('#selectCountryVD').selectpicker({
 							size : 'auto',
 							maxOptions : 3
 						});
-						$('#selectIndex').selectpicker({
+						$('#selectCountrySA').selectpicker({
+							size : 'auto',
+							maxOptions : 1
+						});
+						$('#selectIndexVD').selectpicker({
 							size : 'auto',
 							width : '130px'
 						});
-						$('#selectEnergyEquivalent').selectpicker({
+						$('#selectIndexSA').selectpicker({
+							size : 'auto',
+							width : '130px'
+						});
+						$('#selectEnergyEquivalentVD').selectpicker({
+							size : 'auto',
+							width : '150px'
+						});
+						$('#selectEnergyEquivalentSA').selectpicker({
 							size : 'auto',
 							width : '150px'
 						});
@@ -53,55 +64,7 @@
 						
 						
 
-                        if($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!="" && $('#selectIndex').val()!="" && $('#selectCountry').val().length>1) {
-                        $('#scenarioAnalysis').prop('disabled', true);
-                        $('#visualize').prop('disabled', false);
-                        console.log('disabled: '+$('#selectCountry').val().length);
-                        }
-                        else if ($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!="" && $('#selectIndex').val()!="" && $('#selectCountry').val().length<2){
-                        $('#scenarioAnalysis').prop('disabled', false);
-                        $('#visualize').prop('disabled', false);
-                        console.log('enabled: '+$('#selectCountry').val().length);
-                        }
-						else if($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!=""  && $('#selectCountry').val().length>=1) {
-								$('#scenarioAnalysis').prop('disabled', true);
-								$('#visualize').prop('disabled', false);
-								console.log('disabled: '+$('#selectCountry').val().length);
-							}
-						
-						
-                        else
-                        {
-                        $('#scenarioAnalysis').prop('disabled', true);
-                        $('#visualize').prop('disabled', true);
-                        }
-
-                        $('.selectBox').change(function() {
-
-                            if($('#selectCountry').val()!=null &&  $('#selectEnergyEquivalent').val()!="" && $('#selectIndex').val()!="" && $('#selectCountry').val().length>1) {
-                               $('#scenarioAnalysis').prop('disabled', true);
-                               $('#visualize').prop('disabled', false);
-                               console.log('disabled: '+$('#selectCountry').val().length);
-                            }
-                            else if ($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!="" && $('#selectIndex').val()!="" && $('#selectCountry').val().length<2){
-                               $('#scenarioAnalysis').prop('disabled', false);
-                               $('#visualize').prop('disabled', false);
-                               console.log('enabled: '+$('#selectCountry').val().length);
-                            }
-							else if($('#selectCountry').val()!=null && $('#selectEnergyEquivalent').val()!=""  && $('#selectCountry').val().length>=1) {
-								$('#scenarioAnalysis').prop('disabled', true);
-								$('#visualize').prop('disabled', false);
-								console.log('disabled: '+$('#selectCountry').val().length);
-							}
-                            else
-                            {
-                               $('#scenarioAnalysis').prop('disabled', true);
-                               $('#visualize').prop('disabled', true);
-                            }
-
-                         //   console.log($('#selectEnergyEquivalent').val());
-
-                        });
+                      
 
 	});
 
@@ -110,15 +73,20 @@
 
 <script type="text/javascript">
 	function getData() {
-
+	//	console.log($('#selectCountry').val());
+		if($('#selectCountryVD').val()==null)			
+		{
+			alert("please select at least one country for Visualize Data");
+			return false;
+		}
 		var country = "";
-		$.each($("#selectCountry option:selected"), function() {
+		$.each($("#selectCountryVD option:selected"), function() {
 			country = country.concat($(this).val());
 			country = country.concat(",");
 		});
 
-        var property =  $("#selectIndex option:selected").val().trim().toString();
-	 	var unitIndex =$("input[name='selectEnergyEquivalent']:checked").val();
+        var property =  $("#selectIndexVD option:selected").val().trim().toString();
+	 	var unitIndex =$("input[name='selectEnergyEquivalentVD']:checked").val();
 				
 		//alert(property);
 		//alert(unitIndex);
@@ -149,21 +117,51 @@
 	}
 
 	function getScenarioData() {
+		if($('#selectCountrySA').val()==null)			
+		{
+			alert("please select any country for Scenario Analysis");
+			return false;
+		}
+		else if($('#selectCountrySA').val().length>1)			
+		{
+			alert("please select only one country for Scenario Analysis");
+			return false;
+		}
+		else if($('#selectIndexSA').val()=="")
+		{
+			alert("please select at least one commodity for Scenario Analysis");
+			return false;
+		}
 		var country = "";
-		$.each($("#selectCountry option:selected"), function() {
+		$.each($("#selectCountrySA option:selected"), function() {
 			country = country.concat($(this).val()).toString();
 		});
+		
+		
 
-		var property =  $("#selectIndex option:selected").val().trim()
+		var property =  $("#selectIndexSA option:selected").val().trim()
         
 
-		var unitIndex =$("input[name='selectEnergyEquivalent']:checked").val();
-				
+		var unitIndex =$("input[name='selectEnergyEquivalentSA']:checked").val();
+			
+		
 		
 		window.location.href = getContextPath()
 				+ "/showSimulator.html?country=" + country + "&property="
 				+ property + "&unitIndex=" + unitIndex;
 	}
+	
+function goHome() {
+
+window.location.href = getContextPath();
+}	
+function showScenario() {
+window.location.href = getContextPath()
+				+ "/showSimulator.html?country=" + 0 + "&property="
+				+ 0 + "&unitIndex=" + 0;
+
+}	
+
 </script>
 
 
@@ -182,15 +180,38 @@
         </div>
     </div>
     <ol class="breadcrumb">
-        <li><a class="active">Online Feed Simulator</a></li>
+        <li><a class="active"  style="cursor:pointer; color: #A9A9A9;"  onclick="goHome();">Visualize estimated feed demand</a></li>
+		<li><a style="cursor:pointer;"   onclick="showScenario();">Scenario Analysis </a></li>
+		<li style="float: right"><a style="cursor:pointer;" onclick="goHome();">HOME </a></li>
     </ol>
 
-	<div class="container" id="page" style="padding-top: 60px">
-		<div class="row">
-			<div class="col-md-4" id="formTabOne">
+	<div class="container" id="page" style="padding-top: 0px">
+		<div id="visualizeDiv">
+		
+		         <div class="row" style="background-color:CornflowerBlue; ">
+					<div class="col-md-3" id="formTabOne">
+						<div class="form-group" id="countryIdList">
+							<label for="selectCountry" style="color:white">Select country<br /> (up to three)</label> 
+						</div>
+					</div>
+					<div class="col-md-4" id="formTabThree">
+						<div class="form-group" id="unitFormGroup"  >
+							<label for="selectEnergyEquivalent" style="color:white">Select whether results should show energy or protein requirements </label><br/>
+						</div>
+					</div>
+					<div class="col-md-3" id="formTabTwo">
+						<div class="form-group" id="eeFormGroup">
+							<label for="selectIndex" style="color:white">Select base commodity as reference</label> <br />
+						</div>
+					</div>
+				
+                </div>	
+		
+		<div  class="row"  style="background-color:CornflowerBlue; ">
+			<div class="col-md-3" id="formTabOne">
 				<div class="form-group" id="countryIdList">
-					<label for="selectCountry">Select country (up to three)</label> <br /> <select
-						id="selectCountry" multiple="multiple" class="selectBox"
+					<select
+						id="selectCountryVD" multiple="multiple" class="selectBox"
 						title='Choose one or more..' data-live-search="true">
 						<c:choose>
 							<c:when test="${not empty countryList}">
@@ -206,16 +227,22 @@
 					</select>
 				</div>
 			</div>
-			<div class="col-md-4" id="formTabTwo">
+
+			<div class="col-md-4" id="formTabThree">
+				<div class="form-group" id="unitFormGroup">
+					 <label style="color:white"><input type="radio" name="selectEnergyEquivalentVD" value="Energy" checked="checked" >Energy(1000 GJ)</label> 
+					 <label style="color:white"><input type="radio" name="selectEnergyEquivalentVD" value="Protein" >Protein(1000 MT)</label>
+				</div>
+			</div>
+			<div class="col-md-3" id="formTabTwo">
 				<div class="form-group" id="eeFormGroup">
-					<label for="selectIndex">Select base commodity as reference (optional) </label> <br /> <select class="selectBox"
-						id="selectIndex" title='Choose one or more..'>
-						<option selected="selected" value="">Select one</option>
+					<select class="selectBox"
+						id="selectIndexVD" title='Choose one or more..'>
+						<option selected="selected" value="">None</option>
 						<c:choose>
 							<c:when test="${not empty propertyList}">
 								<c:forEach items="${propertyList}" var="property"
 									varStatus="varStatus">
-
 									<option name="pList" value="${property.propertyName}">
 										${property.propertyName}</option>
 								</c:forEach>
@@ -224,33 +251,13 @@
 					</select>
 				</div>
 			</div>
-			<div class="col-md-4" id="formTabThree">
-				<div class="form-group" id="unitFormGroup">
-					<label for="selectEnergyEquivalent">Select whether results should show energy or protein requirements </label><br/>
-                    <!--<select
-						class="selectBox" id="selectIndex">
-						<option selected="selected" value="">Select one</option>
-						<option value="Energy">Energy(kcal)</option>
-						<option value="Protein">Protein</option>
-					</select> -->
-					 <label><input type="radio" name="selectEnergyEquivalent" value="Energy" checked="checked" >Energy(MJ)</label> 
-					 <label><input type="radio" name="selectEnergyEquivalent" value="Protein" >Protein(Tonnes)</label>
-				</div>
+
+			<div class="col-md-2" id="buttonTab">
+				<button type="button" id="visualize" class="btn btn-default" style="height: 32px; width: 120px" onClick="getData();">Proceed</button>
 			</div>
+
 		</div>
-		
-		<div class="row" style="margin-left: 320px">
-			<div class="col-md-1">
-				<button type="button" id="visualize" class="btn btn-default" style="height: 32px; width: 220px" onClick="getData();">Visualize estimated feed demand</button>
-			</div>
-			
-			<div class="col-md-1" style="margin-left: 190px">
-				<button type="button" class="btn btn-default" id="scenarioAnalysis"
-					onClick="getScenarioData();">Scenario Analysis</button>
-			</div> 
-			<div class="col-md-6"></div>
 		</div>
-		
 		<div name="animalData" id="animalData"></div>
 	</div>
 	</div>

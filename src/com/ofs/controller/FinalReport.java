@@ -50,14 +50,18 @@ public class FinalReport {
 	 */
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value = "/finalReport", method = RequestMethod.POST)
+	@RequestMapping(value = "/finalReport", method = RequestMethod.GET)
 	public String getAllData(
 			@RequestParam(value = "country", required = false) Integer countryId,
 			@RequestParam(value = "unitIndex", required = false) String unitIndex,
 			@RequestParam(value = "property", required = false) String propertyName,
-			@RequestParam(value = "nfgRate", required = false) String nfgRate,
+			@RequestParam(value = "year", required = false) Integer year,
+			@RequestParam(value = "perChngAnmCount", required = false) String perChngAnmCount,
+			@RequestParam(value = "perChngNonForgRat", required = false) String perChngNonForgRat,
+			@RequestParam(value = "perChngUtIdx", required = false) String perChngUtIdx,
 			Model model) {
 
+		
 		/*
 		 * Get Property Value
 		 */
@@ -79,8 +83,13 @@ public class FinalReport {
 		model.addAttribute("propertyValue", propertyValue);
 		model.addAttribute("propertyName", propertyName);
 		model.addAttribute("unitIndex", unitIndex);
-		model.addAttribute("nfgRate",nfgRate);
+		model.addAttribute("year", year);
 		model.addAttribute("countryId",countryId);
+		model.addAttribute("perChngAnmCount",perChngAnmCount);
+		model.addAttribute("perChngNonForgRat",perChngNonForgRat);
+		model.addAttribute("perChngUtIdx",perChngUtIdx);
+		
+		System.out.println(perChngAnmCount + "-" + perChngNonForgRat + "-" + perChngUtIdx );
 		/*
 		 * Get Animal Data for selected countries
 		 */
